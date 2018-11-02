@@ -82,4 +82,4 @@ the HTTP server on port 3000
 
 # Installation
 
-This bit has yet to be written
+This bit has yet to be written, but there's going to be a Dockerfile and stuff
