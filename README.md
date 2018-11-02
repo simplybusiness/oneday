@@ -1,10 +1,21 @@
-# boost
+# Boost
 
 FIXME: description
 
 ## Installation
 
 Download from http://example.com/FIXME.
+
+## Development Setup
+
+You will need to have a Postgresql instance running.  There is a Procfile
+to help with this if you want to run Foreman, but you need to run `initdb`
+before it starts
+
+    initdb -D var/postgresql
+
+
+
 
 ## Usage
 

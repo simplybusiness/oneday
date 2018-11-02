@@ -3,5 +3,5 @@ with pkgs;
 stdenv.mkDerivation rec {
   name = "boost";
   buildInputs = [ ];
-  nativeBuildInputs = [ leiningen ];
+  nativeBuildInputs = [ leiningen postgresql foreman ];
 }
