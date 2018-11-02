@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.slf4j/slf4j-log4j12 "1.7.25"]
                  [com.layerware/hugsql "0.4.9"]
+                 [ring "1.7.1"]
                  [org.postgresql/postgresql "42.2.2"]
                  [migratus "1.1.6"]]
   :plugins [[migratus-lein "0.6.7"]]
