@@ -14,13 +14,13 @@ before it starts
 
     initdb -D var/postgresql
     createuser boostuser
-    createdb boostdb
+    createdb boost
 
 Then at the beginning of each development session, just run
 
      foreman start
 
-
+     lein migratus migrate
 
 
 ## Usage
