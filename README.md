@@ -13,6 +13,12 @@ to help with this if you want to run Foreman, but you need to run `initdb`
 before it starts
 
     initdb -D var/postgresql
+    createuser boostuser
+    createdb boostdb
+
+Then at the beginning of each development session, just run
+
+     foreman start
 
 
 
