@@ -3,6 +3,7 @@
             [boost.page :refer [page]]
             [boost.views :as v]
             [ring.util.response :as rsp]
+            [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.adapter.jetty :refer [run-jetty]]))
 
 (def routes
@@ -26,14 +27,17 @@
    :body (str "about\n")})
 
 
-(defn handle-request [r]
+(defn app-handler [r]
   (let [route (bd/match-route routes (:uri r))]
     (if route
-      (dispatch route r)
+      (let [response (dispatch route r)]
+        (println response)
+        response)
       (rsp/content-type
        (rsp/not-found "not found")
        "text/plain"))))
 
+(def handle-request (wrap-stacktrace app-handler))
 
 (defn handler [r] (#'handle-request r))
 
