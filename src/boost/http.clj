@@ -1,6 +1,7 @@
 (ns boost.http
   (:require [bidi.bidi :as bd]
             [boost.page :refer [page]]
+            [boost.views :as v]
             [ring.util.response :as rsp]
             [ring.adapter.jetty :refer [run-jetty]]))
 
@@ -17,10 +18,7 @@
    :headers {"content-type" "text/plain"}
    :body (str "boost\n")})
 
-(defmethod dispatch :post [_ r]
-  (page
-   "Post a Boost"
-   "hey yeah"))
+(defmethod dispatch :post [_ r] (v/post-boost r))
 
 (defmethod dispatch :about [_ r]
   {:status 200
