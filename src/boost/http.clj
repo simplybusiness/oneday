@@ -1,41 +1,29 @@
+;; the majority of this file is about routes, not http per se
+;; think about renaming it
+
 (ns boost.http
   (:require [bidi.bidi :as bd]
             [boost.page :refer [page]]
             [boost.views :as v]
+            boost.controllers.boost
             [ring.util.response :as rsp]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.adapter.jetty :refer [run-jetty]]))
 
 (def routes
   ["/"
-   {"" :boost
-    "post" :post
-    "about" :about}])
-
-(defmulti dispatch (fn [match _] (:handler match)))
-
-(defmethod dispatch :boost [_ r]
-  {:status 200
-   :headers {"content-type" "text/plain"}
-   :body (str "boost\n")})
-
-(defmethod dispatch :post [_ r] (v/post-boost r))
-
-(defmethod dispatch :about [_ r]
-  {:status 200
-   :headers {"content-type" "text/plain"}
-   :body (str "about\n")})
+   {"" boost.controllers.boost/index
+    "post" boost.controllers.boost/post
+    #_#_ "about" :about}])
 
 
 (defn app-handler [r]
   (let [route (bd/match-route routes (:uri r))]
     (if route
-      (let [response (dispatch route r)]
-        (println response)
-        response)
-      (rsp/content-type
-       (rsp/not-found "not found")
-       "text/plain"))))
+      (let [controller (:handler route)
+            view-data (controller r)]
+        ((:view view-data) (dissoc view-data :view)))
+      (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
 (def handle-request (wrap-stacktrace app-handler))
 

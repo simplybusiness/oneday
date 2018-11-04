@@ -1,4 +1,5 @@
 (ns boost.core
+  (:require boost.http)
   (:gen-class))
 
 (defn -main

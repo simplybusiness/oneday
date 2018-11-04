@@ -46,11 +46,11 @@ collectively to co-ordinate and to decide how to split the rewards.
 ## Winning
 
 If you've done the work you deserve the recognition.  To tell the
-world and claim the reward, click on the checquered flag icon, and
-write a note which includes a link (e.g. the branch or PR URL) to your
-work. This will notify the sponsors to go and look: it is then up to
-you and them to decide whether the work meets the requirement, and
-award the points.
+world and claim the reward, click on the medal icon, and write a note
+which includes a link (e.g. the branch or PR URL) to your work. This
+will notify the sponsors to go and look: it is then up to you and them
+to decide whether the work meets the requirement, and award the
+points.
 
 # Development
 
