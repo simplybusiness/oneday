@@ -1,5 +1,7 @@
 # Boost
 
+![](http://images.sweetauthoring.com/product/80633.png)
+
 How do we recognise and reward technical excellence?  Boost is
 "like BountySource.com" (hence, also named after a bar of chocolate)
 "but for the apps we write at Simply Business"
