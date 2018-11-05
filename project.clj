@@ -16,7 +16,8 @@
   :target-path "target/%s"
   :migratus {:store :database
              :migration-dir "migrations"
-             :db {:classname "org.postgressq.Driver"
+             ; jdbc:postgresql://localhost/boost?user=boostuser&password=boostpw
+             :db {:classname "org.postgresql.Driver"
                   :subprotocol "postgresql"
                   :subname "//localhost/boost"
                   :user "boostuser"

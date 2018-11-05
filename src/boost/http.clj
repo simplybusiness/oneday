@@ -12,8 +12,8 @@
 
 (def routes
   ["/"
-   {"" boost.controllers.boost/index
-    "post" boost.controllers.boost/post
+   {"" #'boost.controllers.boost/index
+    "post" #'boost.controllers.boost/post
     #_#_ "about" :about}])
 
 
