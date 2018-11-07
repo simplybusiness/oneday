@@ -1,5 +1,6 @@
 (ns oneday.controllers.proposal
   (require [oneday.domain :as d]
+           jdbc.core
            [ring.util.response :as rsp]
            [oneday.views.proposal :as v]))
 
@@ -10,6 +11,7 @@
 (defn post [r]
   (let [p (and (= (:request-method r) :post) (:form-params r))]
     (println p)
+    (println (jdbc.core/fetch (:db r) "select 1"))
     (if (d/post-proposal p)
       {:respond (rsp/redirect "/" :see-other)}
       ;; not happy about the value I'm sending into this view. It's
