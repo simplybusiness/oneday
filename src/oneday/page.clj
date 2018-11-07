@@ -1,4 +1,4 @@
-(ns boost.page
+(ns oneday.page
   (:require [hiccup.core :as h]
             [hiccup.page :as p]))
 

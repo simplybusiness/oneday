@@ -4,4 +4,4 @@ create table agent (
        display_name varchar
        );
 --;;
-alter table boost add column agent int references agent;
+alter table proposal add column agent int references agent;

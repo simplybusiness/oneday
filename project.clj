@@ -1,4 +1,4 @@
-(defproject boost "0.1.0-SNAPSHOT"
+(defproject oneday "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -12,14 +12,14 @@
                  [org.postgresql/postgresql "42.2.2"]
                  [migratus "1.1.6"]]
   :plugins [[migratus-lein "0.6.7"]]
-  :main ^:skip-aot boost.core
+  :main ^:skip-aot oneday.core
   :target-path "target/%s"
   :migratus {:store :database
              :migration-dir "migrations"
-             ; jdbc:postgresql://localhost/boost?user=boostuser&password=boostpw
+             ; jdbc:postgresql://localhost/oneday?user=onedayuser&password=onedaypw
              :db {:classname "org.postgresql.Driver"
                   :subprotocol "postgresql"
-                  :subname "//localhost/boost"
-                  :user "boostuser"
-                  :password "boostpw"}}
+                  :subname "//localhost/oneday"
+                  :user "onedayuser"
+                  :password "onedaypw"}}
   :profiles {:uberjar {:aot :all}})

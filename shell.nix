@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} } :
 with pkgs;
 stdenv.mkDerivation rec {
-  name = "boost";
+  name = "oneday";
   buildInputs = [ ];
   nativeBuildInputs = [ leiningen postgresql foreman ];
   shellHook = ''

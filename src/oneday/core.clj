@@ -1,5 +1,5 @@
-(ns boost.core
-  (:require boost.http)
+(ns oneday.core
+  (:require oneday.http)
   (:gen-class))
 
 (defn -main

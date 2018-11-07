@@ -1,11 +1,11 @@
 ;; the majority of this file is about routes, not http per se
 ;; think about renaming it
 
-(ns boost.http
+(ns oneday.http
   (:require [bidi.bidi :as bd]
-            [boost.page :refer [page]]
-            [boost.views :as v]
-            boost.controllers.boost
+            [oneday.page :refer [page]]
+            [oneday.views :as v]
+            oneday.controllers.proposal
             [ring.util.response :as rsp]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
@@ -13,8 +13,8 @@
 
 (def routes
   ["/"
-   {"" #'boost.controllers.boost/index
-    "post" #'boost.controllers.boost/post
+   {"" #'oneday.controllers.proposal/index
+    "post" #'oneday.controllers.proposal/post
     #_#_ "about" :about}])
 
 
