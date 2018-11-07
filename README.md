@@ -16,6 +16,7 @@ How do we recognise and reward technical excellence?  Oneday is
 * Browse through other people's proposals to find something different
   or interesting to pick up.
 
+# How it works
 
 _[ this next bit is a description of how things will be and has not
 yet been implemented ]_
@@ -59,7 +60,7 @@ will notify the sponsors to go and look: it is then up to you and them
 to decide whether the work meets the requirement, and award the
 points.
 
-# Development
+# How to develop/run it, etc etc
 
 ## Setup
 
@@ -87,6 +88,6 @@ to get a REPL (interactive top level like the Rails console) and start
 the HTTP server on port 3000
 
 
-# Installation
+## Deployment
 
 This bit has yet to be written, but there's going to be a Dockerfile and stuff
