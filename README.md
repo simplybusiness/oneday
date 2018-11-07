@@ -62,17 +62,23 @@ points.
 
 # How to develop/run it, etc etc
 
-## Setup
+## First-time setup
 
-You will need to have a Postgresql instance running.  There is a Procfile
-to help with this if you want to run Foreman, but you need to run `initdb`
-before it starts:
+If you are using the Nix package manager, you can run `nix-shell` in
+this directory to get a development environment instead of resorting
+to Homebrew.  If not, you will need `leiningen` and `postgresql`
+
+    brew install leiningen postgresql
+
+You will need to have a Postgresql server running and configured.
 
     initdb -D var/postgresql
-    createuser onedayuser
-    createdb oneday
+    foreman start
+    (psql -d template1 -c "\du" |grep onedayuser) || createuser onedayuser
+    (psql -d template1 -c "\l" |grep oneday) || createdb oneday
 
-## How to
+
+## Starting background processes
 
 At the beginning of each development session, just run
 
