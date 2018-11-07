@@ -1,9 +1,10 @@
 (ns boost.views.boost
   (:require [boost.page :refer [page]]
+            [clojure.walk :refer [keywordize-keys]]
             [hiccup.form :as f]))
 
-(defn post [value]
-  (let [p (:params value)]
+(defn post [state]
+  (let [p (:params (keywordize-keys state))]
     (page "Post a boost"
           (f/form-to [:post ""]
                      [:div.post {}

@@ -7,6 +7,7 @@
             [boost.views :as v]
             boost.controllers.boost
             [ring.util.response :as rsp]
+            [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.adapter.jetty :refer [run-jetty]]))
 
@@ -22,10 +23,11 @@
     (if route
       (let [controller (:handler route)
             view-data (controller r)]
-        ((:view view-data) (dissoc view-data :view)))
+        (if-let [view (:view view-data)]
+          (view (dissoc view-data :view))))
       (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
-(def handle-request (wrap-stacktrace app-handler))
+(def handle-request (-> app-handler wrap-params wrap-stacktrace))
 
 (defn handler [r] (#'handle-request r))
 
