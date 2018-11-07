@@ -18,7 +18,9 @@
                                      "Complicated"
                                      "Complex"
                                      "Chaotic"]
-                                    (:complexity p))]]))))
+                                    (:complexity p))]]
+                     [:button {} "Post"]
+                     ))))
 (defn index [value]
   (page "Boost"
         [:ul (map (fn [l] [:li {} l]) (:boosts value))]))
