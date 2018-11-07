@@ -1,10 +1,9 @@
 (ns oneday.views.proposal
   (:require [oneday.page :refer [page]]
-            [clojure.walk :refer [keywordize-keys]]
             [hiccup.form :as f]))
 
 (defn post [state]
-  (let [p (:params (keywordize-keys state))]
+  (let [p (:params state)]
     (page "Post a proposal"
           (f/form-to [:post ""]
                      [:div.post {}

@@ -1,6 +1,6 @@
 (ns oneday.controllers.proposal
   (require [oneday.domain :as d]
-           jdbc.core
+           [clojure.walk :refer [keywordize-keys]]
            [ring.util.response :as rsp]
            [oneday.views.proposal :as v]))
 
@@ -9,10 +9,9 @@
 ;; data that view will need
 
 (defn post [r]
-  (let [p (and (= (:request-method r) :post) (:form-params r))]
-    (println p)
-    (println (jdbc.core/fetch (:db r) "select 1"))
-    (if (d/post-proposal p)
+  (let [p (and (= (:request-method r) :post)
+               (keywordize-keys (:form-params r)))]
+    (if (d/post-proposal (:db r) p)
       {:respond (rsp/redirect "/" :see-other)}
       ;; not happy about the value I'm sending into this view. It's
       ;; maybe a special case because there is yet no entity associated
