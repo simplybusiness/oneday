@@ -6,4 +6,4 @@
                             (:title p)
                             (:description p) 
                             (:complexity p)])]
-    (:id res)))
+    (:id (first  res))))

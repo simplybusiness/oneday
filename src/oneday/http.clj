@@ -11,9 +11,10 @@
             [ring.adapter.jetty :refer [run-jetty]]))
 
 (def routes
-  ["/"
+  ["/proposals/"
    {"" #'oneday.controllers.proposal/index
     "post" #'oneday.controllers.proposal/post
+    [:id] #'oneday.controllers.proposal/show
     #_#_ "about" :about}])
 
 
@@ -21,7 +22,7 @@
   (let [route (bd/match-route routes (:uri r))]
     (if route
       (let [controller (:handler route)
-            view-data (controller r)]
+            view-data (controller r route)]
         (if-let [view (:view view-data)]
           (view (dissoc view-data :view))
           (:respond view-data)))

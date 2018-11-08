@@ -20,6 +20,24 @@
                                     (:complexity p))]]
                      [:button {} "Post"]
                      ))))
+
+(defn show [value]
+  (println value)
+  (let [prop (:proposal value)]
+    (page (:title prop)
+          [:div
+           [:div.timestamp {} "Created at " (:created_at prop)]
+           [:p {} (:description prop)]
+           ;; XXX tack the comments on here too
+           ])))
+         
+        
+
+(defn link-to [p]
+  [:a {:href (str "show/" (:id p))}
+   (:title p)])
+
 (defn index [value]
   (page "Oneday proposals"
-        [:ul (map (fn [l] [:li {} l]) (:proposals value))]))
+        [:ul (map (fn [l] [:li {} (link-to l)])
+                  (:proposals value))]))
