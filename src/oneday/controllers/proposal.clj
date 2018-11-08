@@ -1,5 +1,7 @@
 (ns oneday.controllers.proposal
   (require [oneday.domain :as d]
+           [jdbc.core :as jdbc]
+           [clojure.walk :refer [keywordize-keys]]
            [ring.util.response :as rsp]
            [oneday.views.proposal :as v]))
 
@@ -7,10 +9,10 @@
 ;; lookups (local database or external services) to get the
 ;; data that view will need
 
-(defn post [r]
-  (let [p (and (= (:request-method r) :post) (:form-params r))]
-    (println p)
-    (if (d/post-proposal p)
+(defn post [r _]
+  (let [p (and (= (:request-method r) :post)
+               (keywordize-keys (:form-params r)))]
+    (if (and p (d/post-proposal (:db r) p))
       {:respond (rsp/redirect "/" :see-other)}
       ;; not happy about the value I'm sending into this view. It's
       ;; maybe a special case because there is yet no entity associated
@@ -18,6 +20,22 @@
       ;; which would not validate as a legitimate proposal
       {:view v/post :params p})))
 
-(defn index [r]
-  {:view v/index
-   :proposals [1 2 3 4 ]})
+(defn index [r _]
+  (let [offset 0
+        limit 10
+        proposals (jdbc/fetch (:db r)
+                              ["select * from proposal 
+                                order by created_at desc
+                                offset ? limit ? "
+                               offset limit])]
+    {:view v/index
+     :proposals proposals}))
+
+(defn show [r route]
+  (let [id (-> route :route-params :id Integer/parseInt)
+        proposal
+        (first (jdbc/fetch (:db r)
+                           ["select * from proposal 
+                                where id = ?" id]))]
+    {:view v/show
+     :proposal proposal}))

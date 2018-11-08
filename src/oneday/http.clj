@@ -4,7 +4,6 @@
 (ns oneday.http
   (:require [bidi.bidi :as bd]
             [oneday.page :refer [page]]
-            [oneday.views :as v]
             oneday.controllers.proposal
             [ring.util.response :as rsp]
             [ring.middleware.params :refer [wrap-params]]
@@ -12,9 +11,10 @@
             [ring.adapter.jetty :refer [run-jetty]]))
 
 (def routes
-  ["/"
+  ["/proposals/"
    {"" #'oneday.controllers.proposal/index
     "post" #'oneday.controllers.proposal/post
+    [:id] #'oneday.controllers.proposal/show
     #_#_ "about" :about}])
 
 
@@ -22,7 +22,7 @@
   (let [route (bd/match-route routes (:uri r))]
     (if route
       (let [controller (:handler route)
-            view-data (controller r)]
+            view-data (controller r route)]
         (if-let [view (:view view-data)]
           (view (dissoc view-data :view))
           (:respond view-data)))
@@ -32,6 +32,9 @@
 
 (defn handler [r] (#'handle-request r))
 
-(defonce server (atom nil))
 (defn start [config]
-  (reset! server (future (run-jetty handler (merge {:port 3000} config)))))
+  (let [db (-> config :db :connection)
+        wrap-db (fn [h] (fn [r] (h (assoc r :db db))))
+        server (future (run-jetty (wrap-db handler) (:http config)))]
+    (assoc-in config [:http :server] server)))
+

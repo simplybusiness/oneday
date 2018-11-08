@@ -1,4 +1,9 @@
-(ns oneday.domain)
+(ns oneday.domain
+  (:require [jdbc.core :as jdbc]))
 
-(defn post-proposal [p]
-  false)
+(defn post-proposal [db p]
+  (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity) values (?,?,?) returning id"
+                            (:title p)
+                            (:description p) 
+                            (:complexity p)])]
+    (:id (first  res))))
