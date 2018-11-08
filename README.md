@@ -73,7 +73,7 @@ to Homebrew.  If not, you will need `leiningen` and `postgresql`
 You will need to have a Postgresql server running and configured.
 
     initdb -D var/postgresql
-    foreman start
+    foreman start              # takes over your terminal, so open another
     (psql -d template1 -c "\du" |grep onedayuser) || createuser onedayuser
     (psql -d template1 -c "\l" |grep oneday) || createdb oneday
 
@@ -82,8 +82,8 @@ You will need to have a Postgresql server running and configured.
 
 At the beginning of each development session, just run
 
-     $ foreman start
-     $ lein migratus migrate
+     $ foreman start           # takes over your terminal, so open another
+     $ lein migratus migrate   # run any unapplied migrations
 
 Then run
 
@@ -91,7 +91,9 @@ Then run
      ondeday.core> (oneday.http/start {})
 
 to get a REPL (interactive top level like the Rails console) and start
-the HTTP server on port 3000
+the HTTP server on port 3000.  You can get fancier: if you speak Emacs
+my recommendation is to use Cider, but this README file is too short
+to teach you Emacs.
 
 
 ## Deployment
