@@ -1,5 +1,6 @@
 (ns oneday.views.proposal
   (:require [oneday.page :refer [page]]
+            [oneday.helpers :as h]
             [hiccup.form :as f]))
 
 (defn post [state]
@@ -37,7 +38,14 @@
   [:a {:href (str "show/" (:id p))}
    (:title p)])
 
+(defn proposal [prop]
+  [:div.proposal {}
+   [:h2 (link-to prop)]
+   [:div.dateline "Posted "
+    (if-let [c(:created_at prop)] (h/format-time c) "")
+    " by " (or (:sponsor prop) "a mystery guest")]
+   [:blockquote (:description prop)]])
+  
 (defn index [value]
   (page "Oneday proposals"
-        [:ul (map (fn [l] [:li {} (link-to l)])
-                  (:proposals value))]))
+        (map proposal (:proposals value))))

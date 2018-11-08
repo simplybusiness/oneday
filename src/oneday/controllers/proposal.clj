@@ -12,7 +12,7 @@
 (defn post [r _]
   (let [p (and (= (:request-method r) :post)
                (keywordize-keys (:form-params r)))]
-    (if (and p (d/post-proposal (:db r) p))
+    (if (and p (d/post-proposal (:db r) (assoc p :sponsor (:username r))))
       {:respond (rsp/redirect "/" :see-other)}
       ;; not happy about the value I'm sending into this view. It's
       ;; maybe a special case because there is yet no entity associated
@@ -24,9 +24,11 @@
   (let [offset 0
         limit 10
         proposals (jdbc/fetch (:db r)
-                              ["select * from proposal 
-                                order by created_at desc
-                                offset ? limit ? "
+                              ["select p.*,a.handle as sponsor from 
+(proposal p left join agent a on a.id=p.agent)
+where p.created_at is not null 
+order by created_at desc
+offset ? limit ? "
                                offset limit])]
     {:view v/index
      :proposals proposals}))

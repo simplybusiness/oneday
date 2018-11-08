@@ -28,7 +28,10 @@
           (:respond view-data)))
       (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
-(def handle-request (-> app-handler wrap-params wrap-stacktrace))
+;; XXX replace this with real auth (jumpcloud, github, google?)
+(defn wrap-auth [h] (fn [r] (h (assoc r :username "daniel-barlow"))))
+
+(def handle-request (-> app-handler wrap-params wrap-stacktrace wrap-auth))
 
 (defn handler [r] (#'handle-request r))
 
