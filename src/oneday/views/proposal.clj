@@ -22,20 +22,8 @@
                      [:button {} "Post"]
                      ))))
 
-(defn show [value]
-  (println value)
-  (let [prop (:proposal value)]
-    (page (:title prop)
-          [:div
-           [:div.timestamp {} "Created at " (:created_at prop)]
-           [:p {} (:description prop)]
-           ;; XXX tack the comments on here too
-           ])))
-         
-        
-
 (defn link-to [p]
-  [:a {:href (str "show/" (:id p))}
+  [:a {:href (:id p)}
    (:title p)])
 
 (defn proposal [prop]
@@ -45,7 +33,15 @@
     (if-let [c(:created_at prop)] (h/format-time c) "")
     " by " (or (:sponsor prop) "a mystery guest")]
    [:blockquote (:description prop)]])
-  
+
+(defn show [value]
+  (let [prop (:proposal value)]
+    (page (:title prop)
+          [:div
+           (proposal prop)
+           ;; XXX tack the comments on here too
+           [:button {} "Comment"]])))
+
 (defn index [value]
   (page "Oneday proposals"
         (map proposal (:proposals value))))

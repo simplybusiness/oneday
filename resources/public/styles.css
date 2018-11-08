@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "museosans";
+    font-style: normal;
+    font-weight: normal;
+    src: url('museo-sans-500.woff');
+}
+
+h1 {
+    padding: 1em;
+}
+
+body {
+    font-family: "museosans1",helvetica,sans-serif;
+    margin: 1em;
+    background: #66a;
+}
+blockquote {
+    margin: 1em 2em;
+    border-left: 8px solid  #ccc;
+    padding: 0 1em ;
+}
+div.proposal {
+    margin-bottom: 2em;
+    padding: 0.5em 1em;
+    background: linear-gradient(45deg, #edd,#eec);
+}
+div.proposal h2 {
+    padding:0;
+    margin: 0;
+}
+div.proposal .dateline {
+    font-size: 90%;
+    font-weight: bold;
+
+}
+
+.gradient {
+	background: linear-gradient(45deg, #e8473f, #e8473f, #ed2d7e, #ed2d7e, #6b5ea9, #6b5ea9, #00aecb, #00aecb, #00ad93, #00ad93, #e8473f, #e8473f, #ed2d7e, #ed2d7e, #6b5ea9, #6b5ea9, #00aecb, #00aecb, #00ad93, #00ad93);
+	background-size: 1200% 100%;
+	background-position: 100% 50%;
+}

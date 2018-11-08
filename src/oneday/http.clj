@@ -3,19 +3,24 @@
 
 (ns oneday.http
   (:require [bidi.bidi :as bd]
+            [bidi.ring :refer [->Resources]]
             [oneday.page :refer [page]]
             oneday.controllers.proposal
+            oneday.controllers.static
             [ring.util.response :as rsp]
             [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.content-type :refer (wrap-content-type)]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.adapter.jetty :refer [run-jetty]]))
 
 (def routes
-  ["/proposals/"
-   {"" #'oneday.controllers.proposal/index
-    "post" #'oneday.controllers.proposal/post
-    [:id] #'oneday.controllers.proposal/show
-    #_#_ "about" :about}])
+  ["/" {["static/" [ #"[a-zA-Z0-9/_\.-]+" :path]]
+        #'oneday.controllers.static/send-resource
+        "proposals/"
+        {"" #'oneday.controllers.proposal/index
+         "post" #'oneday.controllers.proposal/post
+         [:id] #'oneday.controllers.proposal/show
+         #_#_ "about" :about}}])
 
 
 (defn app-handler [r]
@@ -31,7 +36,8 @@
 ;; XXX replace this with real auth (jumpcloud, github, google?)
 (defn wrap-auth [h] (fn [r] (h (assoc r :username "daniel-barlow"))))
 
-(def handle-request (-> app-handler wrap-params wrap-stacktrace wrap-auth))
+(def handle-request
+  (-> app-handler wrap-params wrap-stacktrace wrap-auth wrap-content-type))
 
 (defn handler [r] (#'handle-request r))
 
