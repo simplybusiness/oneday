@@ -20,15 +20,17 @@
       ;; which would not validate as a legitimate proposal
       {:view v/post :params p})))
 
+  (def proposal-sql "select p.*, a.handle  as sponsor from 
+  (proposal p left join agent a on a.id=p.agent)
+where p.created_at is not null ")
+
 (defn index [r _]
   (let [offset 0
         limit 10
         proposals (jdbc/fetch (:db r)
-                              ["select p.*,a.handle as sponsor from 
-(proposal p left join agent a on a.id=p.agent)
-where p.created_at is not null 
-order by created_at desc
-offset ? limit ? "
+                              [(str proposal-sql
+                                    "order by created_at desc
+offset ? limit ? ")
                                offset limit])]
     {:view v/index
      :proposals proposals}))
@@ -37,7 +39,7 @@ offset ? limit ? "
   (let [id (-> route :route-params :id Integer/parseInt)
         proposal
         (first (jdbc/fetch (:db r)
-                           ["select * from proposal 
-                                where id = ?" id]))]
+                           [(str "select * from ("
+                                 proposal-sql" ) proposal where id = ?") id]))]
     {:view v/show
      :proposal proposal}))
