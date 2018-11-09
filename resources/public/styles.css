@@ -1,0 +1,89 @@
+@font-face {
+    font-family: "museosans";
+    font-style: normal;
+    font-weight: normal;
+    src: url('/static/museo-sans-500.woff');
+}
+
+header {
+    padding: 0.3em 1em;
+    margin: 0em;
+    margin-bottom: 2em;
+}
+
+body {
+    font-family: "museosans",helvetica,sans-serif;
+    background: #eee;
+}
+blockquote {
+    margin: 2em 2em;
+    border-left: 8px solid  #ecc;
+    padding: 1em 1em ;
+}
+blockquote h1 {
+    font-size: 120%;
+}
+blockquote h2 {
+    font-size: 110%;
+}
+
+div.intro {
+    padding: 1em 0.5em;
+    padding-left: 2em;
+    font-size: 140%;
+    background: linear-gradient(45deg, #e8473f, #e8473f, #ed2d7e, #ed2d7e, #6b5ea9, #6b5ea9, #00aecb, #00aecb, #00ad93, #00ad93, #e8473f, #e8473f, #ed2d7e, #ed2d7e, #6b5ea9, #6b5ea9, #00aecb, #00aecb, #00ad93, #00ad93);
+    background-size: 1200% 100%;
+    background-position: 20% 50%;
+    color: #bbb;
+    margin: 1em;
+    margin-bottom: 3em;
+}
+
+div.intro p { padding: 0; margin:0 0 0.3em 0; }
+div.intro a { font-weight: bold; color: #ccc; }
+
+
+
+div.proposal {
+    margin: 1em 5em 2em 1em;
+    padding: 0.5em 1em;
+    background: linear-gradient(45deg, #fdd,#eec);
+    box-shadow: 1px 1px 7px #888;
+}
+div.proposal h2 {
+    padding:0;
+    margin: 0;
+}
+div.proposal h2 a { text-decoration: none; }
+
+.dateline {
+    font-size: 90%;
+    font-weight: bold;
+
+}
+
+.gradient {
+    background: linear-gradient(5deg, #e8473f, #e8473f, #ed2d7e, #ed2d7e, #6b5ea9, #6b5ea9, #00aecb, #00aecb, #00ad93, #00ad93, #e8473f, #e8473f, #ed2d7e, #ed2d7e, #6b5ea9, #6b5ea9, #00aecb, #00aecb, #00ad93, #00ad93);
+    background-size: 1200% 100%;
+    background-position: 100% 50%;
+}
+
+div.proposal form {
+    width: 100%;
+    font-size: 120%;
+}
+div.proposal form div {
+    margin: 1em 0.2em;
+}
+div.proposal form div input,textarea {
+    margin-left: 1em;
+    width: 70%;
+    font-size: 120%;
+}
+div.proposal form textarea {
+    vertical-align: top;
+    height: 10em;
+}
+div.proposal form select {
+    margin-left: 1em;
+}
