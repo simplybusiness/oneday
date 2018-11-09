@@ -29,7 +29,7 @@
       (let [controller (:handler route)
             view-data (controller r route)]
         (if-let [view (:view view-data)]
-          (view (dissoc view-data :view))
+          (rsp/charset (view (dissoc view-data :view)) "UTF-8")
           (:respond view-data)))
       (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
