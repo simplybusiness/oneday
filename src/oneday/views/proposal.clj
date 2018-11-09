@@ -62,10 +62,13 @@
    ])
 
 (defn show-comment [c]
-  [:div.comment {}
-   [:div.attribution {} (:author c) " wrote at "
-    (h/format-time (:created_at c)) ":"]
-   [:div.body (:text c)]])
+  (let [interested? (:interested c)]
+    [:div.comment {:class (if interested? "interested" "drive-by")}
+     [:div.attribution {} (:author c)
+      (if interested? " (who might work on it!) " "")
+      " wrote at "
+      (h/format-time (:created_at c)) ":"]
+     [:div.body (:text c)]]))
 
 (defn show [value]
   (let [prop (:proposal value)]
@@ -81,7 +84,9 @@
        [:p]
        [:form {:class :comment :method "POST" :action (str (:id prop) "/comments/new")}
         (h/merge-attrs (f/text-area :text "")
-                       {:placeholder "What do you think? Add comment"})
+                       {:placeholder "What do you think?"})
+        [:div {}
+         [:label {} (f/check-box :interested) "I am interested in working on this (no commitment)"]]
         [:button {} "Add comment"]
         ]]])))
 

@@ -8,7 +8,9 @@
 
 (defn new [req route]
   (let [proposal-id (Integer/parseInt (-> route :route-params :id))
-        fields (assoc (keywordize-keys (:form-params req))
+        params (keywordize-keys (:form-params req))
+        fields (assoc params
+                      :interested (not (empty? (:interested params)))
                       :author (:username req))]
     (if-let [comment (d/add-comment (:db req) proposal-id fields)]
       {:respond (rsp/redirect (str "/proposals/" proposal-id)

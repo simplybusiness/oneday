@@ -6,16 +6,27 @@
 }
 div.comments div.comment {
     margin-left: 1em;
+    margin-bottom: 0.5em;
     padding: 6px;
     background-color: #eee;
 }
+div.comments div.interested {
+    background-color: #dfd;
+}
+
 div.comments div.comment .attribution {
     font-size: 90%;
     margin-bottom: 9px;
     font-style: italic;
 }
 
+div.proposal form.comment {
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
 div.proposal form.comment textarea#text {
+    margin: 0;
     height: 3em;
     font-size: 100%;
 }
