@@ -10,6 +10,9 @@
           [:link {:rel "stylesheet" :href "/static/styles.css"}]
           [:title {} title]]
          [:body {}
+          [:header.gradient
+           [:a {:href "/proposals/"}
+            [:h1 "One day"]]]
           [:div.contents content]])]
         {:status 200 :body body :headers {"content-type" "text/html"}}))
   

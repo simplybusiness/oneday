@@ -65,10 +65,9 @@
   (let [prop (:proposal value)]
     (page
      (str "oneday - " (:title prop))
-     [:header.gradient
-      [:h1 (:title prop)]
-      (dateline prop)]
      [:div.proposal {}
+      [:h2 (:title prop)]
+      (dateline prop)
       [:blockquote (description prop)]
       [:button {} "Comment"]])))
 
