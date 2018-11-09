@@ -12,9 +12,12 @@
 
 (defn post [r _]
   (let [p (and (= (:request-method r) :post)
-               (keywordize-keys (:form-params r)))]
-    (if (and p (d/post-proposal (:db r) (assoc p :sponsor (:username r))))
-      {:respond (rsp/redirect "/" :see-other)}
+               (keywordize-keys (:form-params r)))
+        success (and
+                 p
+                 (d/post-proposal (:db r) (assoc p :sponsor (:username r))))]
+    (if success
+      {:respond (rsp/redirect (str success) :see-other)}
       ;; not happy about the value I'm sending into this view. It's
       ;; maybe a special case because there is yet no entity associated
       ;; with the view - just the stuff that the user keyed in but
