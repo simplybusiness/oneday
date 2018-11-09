@@ -49,9 +49,12 @@
                 [(str "select * from ("
                       proposal-sql
                       " ) proposal where id = ?") id]))
+        sponsors
+        (jdbc/fetch (:db r) ["select sum(points),a.* from kudosh k join agent a on a.id=k.sponsor_id  where proposal_id=? group by a.id" id])
         comments
-        (jdbc/fetch (:db r) ["select c.*,a.handle as author from comment c join agent a on c.author_id=a.id where proposal_id=? order by created_at desc" id])
+        (jdbc/fetch (:db r) ["select c.*,a.handle as author from comment c join agent a on c.author_id=a.id where proposal_id=? and text<>'' order by created_at desc" id])
         ]
     {:view v/show
      :proposal proposal
+     :sponsors sponsors
      :comments comments}))

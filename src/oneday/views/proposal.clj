@@ -62,7 +62,8 @@
    ])
 
 (defn show-comment [c]
-  (let [interested? (:interested c)]
+  (let [interested? (:interested c)
+        sponsor? (:sponsor c)]
     [:div.comment {:class (if interested? "interested" "drive-by")}
      [:div.attribution {} (:author c)
       (if interested? " (who might work on it!) " "")
@@ -71,23 +72,48 @@
      [:div.body (:text c)]]))
 
 (defn show [value]
-  (let [prop (:proposal value)]
+  (let [prop (:proposal value)
+        kudosh (fn [n]
+                 [:label {}
+                  (h/merge-attrs
+                   (f/radio-button :kudosh false n)
+                   {:onchange "if(this.checked) document.getElementById('sponsor').checked=true;"})
+                  n])]
     (page
      (str "oneday - " (:title prop))
      [:div.proposal {}
       [:h2 (:title prop)]
       (dateline prop)
       [:blockquote (description prop)]
+      (when-let [sponsors (seq (:sponsors value))]
+        [:div.sponsors {}
+         [:h3 "Sponsored by"]
+         [:ul (map
+               (fn [s] [:li (:handle s) " (" (:sum s) " points)"])
+               sponsors)]])
       [:div.comments {}
        [:h3 "Comments"]
        (map show-comment (:comments value))
        [:p]
-       [:form {:class :comment :method "POST" :action (str (:id prop) "/comments/new")}
-        (h/merge-attrs (f/text-area :text "")
-                       {:placeholder "What do you think?"})
-        [:div {}
-         [:label {} (f/check-box :interested) "I am interested in working on this (no commitment)"]]
-        [:button {} "Add comment"]
+       [:form {:class :comment
+               :method "POST"
+               :action (str (:id prop) "/comments/new")}
+        [:div.field
+         (h/merge-attrs (f/text-area :text "")
+                        {:placeholder "What do you think?"})]
+        [:div.field
+         [:label {} (f/check-box :interested) " I am interested in working on this (no commitment)"]]
+        [:div.field
+         (h/merge-attrs
+          (f/check-box :sponsor)
+          {:onclick
+           "this.checked||Array.prototype.map.call(document.getElementsByName('kudosh'), function(l) {l.checked=false;})"})
+         " I want to sponsor this work with "
+         (kudosh "10") " "
+         (kudosh "20") " "         
+         (kudosh "40") " kudosh"]
+        [:div.field [:button {} "Add comment"]]
+
         ]]])))
 
 

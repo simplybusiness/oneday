@@ -21,16 +21,23 @@ div.comments div.comment .attribution {
 }
 
 div.proposal form.comment {
-    margin-left: 1em;
-    margin-bottom: 1em;
+    margin: 1em;
+    background: #eee;
+    padding: 0.3em;
 }
 
 div.proposal form.comment textarea#text {
     margin: 0;
     height: 3em;
     font-size: 100%;
+    background: inherit;
 }
 
+div.proposal form.comment div.field {
+    margin: 0.5em;
+}
+
+    
 
 header {
     padding: 0.3em 1em;

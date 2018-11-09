@@ -11,6 +11,8 @@
         params (keywordize-keys (:form-params req))
         fields (assoc params
                       :interested (not (empty? (:interested params)))
+                      :sponsor (not (empty? (:sponsor params)))
+                      :kudosh (Integer/parseInt (:kudosh params))
                       :author (:username req))]
     (if-let [comment (d/add-comment (:db req) proposal-id fields)]
       {:respond (rsp/redirect (str "/proposals/" proposal-id)
