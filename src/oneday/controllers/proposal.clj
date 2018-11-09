@@ -1,5 +1,6 @@
 (ns oneday.controllers.proposal
   (require [oneday.domain :as d]
+           [clojure.java.io :as io]
            [jdbc.core :as jdbc]
            [clojure.walk :refer [keywordize-keys]]
            [ring.util.response :as rsp]
@@ -20,9 +21,11 @@
       ;; which would not validate as a legitimate proposal
       {:view v/post :params p})))
 
-  (def proposal-sql "select p.*, a.handle  as sponsor from 
-  (proposal p left join agent a on a.id=p.agent)
-where p.created_at is not null ")
+;; THINKABOUTME there's quite a lot of sql and jdbc grunge in this
+;; file which feels like it should be moved into a db interface of
+;; some kind
+
+(def proposal-sql (slurp (io/resource "sql/proposal-frag.sql")))
 
 (defn index [r _]
   (let [offset 0
