@@ -3,6 +3,6 @@
             [ring.util.response :refer [resource-response]]))
 
 (defn send-resource [req route]
-  (let [r (resource-response (io/resource "public/" (:path route)))]
-    (println r)
+  (let [res (str "public/" (-> route :route-params :path))
+        r (resource-response res)]
     {:respond r}))
