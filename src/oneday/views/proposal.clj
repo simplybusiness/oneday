@@ -55,6 +55,9 @@
    [:p {:align :right
         :style "font-weight: bold"}
     [:a {:href (:id prop)}
+     (:kudosh prop) " kudosh"]
+    " "
+    [:a {:href (:id prop)}   
      (:comments prop) " comments"]]
    ])
 
