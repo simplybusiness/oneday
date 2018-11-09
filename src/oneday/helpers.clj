@@ -9,3 +9,6 @@
           :else
           (let [sdf (java.text.SimpleDateFormat. "yyyy-MM-dd hh:mm")]
             (.format sdf time)))))
+
+(defn merge-attrs [[tagname attrs & content] more-attrs]
+  (into [tagname (merge attrs more-attrs)] content))

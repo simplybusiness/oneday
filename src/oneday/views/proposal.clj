@@ -10,15 +10,16 @@
 (defn post [state]
   (let [p (merge  {:description placeholder-descr} (or (:params state) {}))]
     (page "Post a proposal"
-          [:header.gradient {} [:h1 "Post a proposal"]]
-          [:div.proposal {}
+          [:div.proposal.post-proposal {}
+           [:h2 "Post a proposal"]
            (f/form-to
             [:post ""]
             [:div {}
              [:label {:for :title} "Title"]
              (f/text-field :title (:title p))]
             [:div {}
-             [:label {:for :description} "Description"]
+             [:label {:for :description :title "(markdown ok)"}
+              "Description" ]
              (f/text-area :description (:description p))]
             [:div {}
              [:label {:for :tags} "Tags"]
@@ -60,6 +61,11 @@
      (:comments prop) " comments"]]
    ])
 
+(defn show-comment [c]
+  [:div.comment {}
+   [:div.attribution {} (:author c) " wrote at "
+    (h/format-time (:created_at c)) ":"]
+   [:div.body (:text c)]])
 
 (defn show [value]
   (let [prop (:proposal value)]
@@ -69,7 +75,16 @@
       [:h2 (:title prop)]
       (dateline prop)
       [:blockquote (description prop)]
-      [:button {} "Comment"]])))
+      [:div.comments {}
+       [:h3 "Comments"]
+       (map show-comment (:comments value))
+       [:p]
+       [:form {:class :comment :method "POST" :action (str (:id prop) "/comments/new")}
+        (h/merge-attrs (f/text-area :text "")
+                       {:placeholder "What do you think? Add comment"})
+        [:button {} "Add comment"]
+        ]]])))
+
 
 (defn index [value]
   (page

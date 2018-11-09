@@ -7,6 +7,7 @@
             [oneday.page :refer [page]]
             oneday.controllers.proposal
             oneday.controllers.static
+            oneday.controllers.comment
             [ring.util.response :as rsp]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.content-type :refer (wrap-content-type)]
@@ -20,7 +21,8 @@
         {"" #'oneday.controllers.proposal/index
          "post" #'oneday.controllers.proposal/post
          [:id] #'oneday.controllers.proposal/show
-         #_#_ "about" :about}}])
+         [:id "/comments/new"] #'oneday.controllers.comment/new
+         }}])
 
 
 (defn app-handler [r]

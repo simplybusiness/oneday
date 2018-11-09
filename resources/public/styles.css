@@ -4,6 +4,22 @@
     font-weight: normal;
     src: url('/static/museo-sans-500.woff');
 }
+div.comments div.comment {
+    margin-left: 1em;
+    padding: 6px;
+    background-color: #eee;
+}
+div.comments div.comment .attribution {
+    font-size: 90%;
+    margin-bottom: 9px;
+    font-style: italic;
+}
+
+div.proposal form.comment textarea#text {
+    height: 3em;
+    font-size: 100%;
+}
+
 
 header {
     padding: 0.3em 1em;
@@ -73,22 +89,24 @@ div.proposal h2 a { text-decoration: none; }
     background-position: 100% 50%;
 }
 
-div.proposal form {
+div.post-proposal form {
     width: 100%;
     font-size: 120%;
 }
-div.proposal form div {
+div.post-proposal form div {
     margin: 1em 0.2em;
 }
-div.proposal form div input,textarea {
+div.post-proposal form div input,textarea {
     margin-left: 1em;
     width: 70%;
     font-size: 120%;
-}
-div.proposal form textarea {
     vertical-align: top;
-    height: 10em;
 }
-div.proposal form select {
+div.post-proposal form textarea#description {
+    height: 15em;
+    font-size: 100%;
+}
+
+div.post-proposal form select {
     margin-left: 1em;
 }

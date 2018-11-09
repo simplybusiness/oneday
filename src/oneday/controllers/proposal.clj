@@ -48,6 +48,10 @@
                 (:db r)
                 [(str "select * from ("
                       proposal-sql
-                      " ) proposal where id = ?") id]))]
+                      " ) proposal where id = ?") id]))
+        comments
+        (jdbc/fetch (:db r) ["select c.*,a.handle as author from comment c join agent a on c.author_id=a.id where proposal_id=? order by created_at desc" id])
+        ]
     {:view v/show
-     :proposal proposal}))
+     :proposal proposal
+     :comments comments}))
