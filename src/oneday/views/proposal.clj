@@ -48,10 +48,9 @@
   
 
 (defn proposal-summary [prop]
-  [:div.proposal {}
+  [:div.proposal {:onclick (str "window.location=window.location.href+" (:id prop))}
    [:h2 (link-to prop)]
    (dateline prop)
-   [:blockquote (description prop)]
    [:p {:align :right
         :style "font-weight: bold"}
     [:a {:href (:id prop)}
