@@ -88,12 +88,12 @@ At the beginning of each development session, just run
 Then run
 
      $ lein repl
-     ondeday.core> (oneday.http/start {})
+     ondeday.core> (-main)
 
-to get a REPL (interactive top level like the Rails console) and start
-the HTTP server on port 3000.  You can get fancier: if you speak Emacs
-my recommendation is to use Cider, but this README file is too short
-to teach you Emacs.
+to get a REPL ("Read Eval Print Loop" - an interactive top level like
+the Rails console) and start the HTTP server on port 3000.  You can
+get fancier: if you speak Emacs my recommendation is to use Cider, but
+this README file is too short to teach you Emacs.
 
 
 ## Deployment
