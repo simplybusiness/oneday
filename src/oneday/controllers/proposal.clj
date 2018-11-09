@@ -30,19 +30,21 @@
 (defn index [r _]
   (let [offset 0
         limit 10
-        proposals (jdbc/fetch (:db r)
-                              [(str proposal-sql
-                                    "order by created_at desc
-offset ? limit ? ")
-                               offset limit])]
+        proposals (jdbc/fetch
+                   (:db r)
+                   [(str proposal-sql
+                         "order by created_at desc offset ? limit ?")
+                    offset limit])]
     {:view v/index
      :proposals proposals}))
 
 (defn show [r route]
   (let [id (-> route :route-params :id Integer/parseInt)
         proposal
-        (first (jdbc/fetch (:db r)
-                           [(str "select * from ("
-                                 proposal-sql" ) proposal where id = ?") id]))]
+        (first (jdbc/fetch
+                (:db r)
+                [(str "select * from ("
+                      proposal-sql
+                      " ) proposal where id = ?") id]))]
     {:view v/show
      :proposal proposal}))
