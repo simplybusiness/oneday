@@ -1,8 +1,8 @@
 (defproject oneday "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :license {:name "MIT License"
+            :url "https://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.slf4j/slf4j-log4j12 "1.7.25"]
                  [com.layerware/hugsql "0.4.9"]
@@ -18,6 +18,8 @@
   :target-path "target/%s"
   :migratus {:store :database
              :migration-dir "migrations"
+             ;; this db config is duplicated in core.clj, need to
+             ;; dry it up
              ; jdbc:postgresql://localhost/oneday?user=onedayuser&password=onedaypw
              :db {:classname "org.postgresql.Driver"
                   :subprotocol "postgresql"
