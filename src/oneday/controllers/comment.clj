@@ -12,7 +12,7 @@
         fields (assoc params
                       :interested (not (empty? (:interested params)))
                       :sponsor (not (empty? (:sponsor params)))
-                      :kudosh (Integer/parseInt (:kudosh params))
+                      :kudosh (Integer/parseInt (or (:kudosh params) "0"))
                       :author (:username req))]
     (if-let [comment (d/add-comment (:db req) proposal-id fields)]
       {:respond (rsp/redirect (str "/proposals/" proposal-id)
