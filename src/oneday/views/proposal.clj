@@ -75,7 +75,6 @@
 (defn index [value]
   (page
    "One day ..."
-   [:header.gradient {} [:h1 "One day ..."]]
    [:div.intro
     [:p "Ever said “<b>one day</b> we ought to do <i>thing</i>” ?"]
     [:p "or “I think we could do  <i>thing</i> in <b>one day</b>”?"]
