@@ -7,5 +7,6 @@
 
 (defn stop [config]
   (if-let [c (-> config :db :connection)]
-    (.close c)))
+    (.close c))
+  config)
 

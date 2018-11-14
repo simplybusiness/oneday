@@ -9,7 +9,9 @@
             oneday.controllers.static
             oneday.controllers.comment
             [ring.util.response :as rsp]
+            [authomatic.oidc :refer [wrap-oidc]]
             [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.session :refer [wrap-session]]
             [ring.middleware.content-type :refer (wrap-content-type)]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.adapter.jetty :refer [run-jetty]]))
@@ -38,14 +40,23 @@
 ;; XXX replace this with real auth (jumpcloud, github, google?)
 (defn wrap-auth [h] (fn [r] (h (assoc r :username "daniel-barlow"))))
 
-(def handle-request
-  (-> app-handler wrap-params wrap-stacktrace wrap-auth wrap-content-type))
-
-(defn handler [r] (#'handle-request r))
+(defn middlewares [config]
+  (-> app-handler
+      (wrap-oidc (-> config :oidc :google))
+      wrap-params
+      wrap-content-type
+      wrap-session
+      wrap-stacktrace
+      ))
 
 (defn start [config]
   (let [db (-> config :db :connection)
+        pipeline (middlewares config)
         wrap-db (fn [h] (fn [r] (h (assoc r :db db))))
-        server (future (run-jetty (wrap-db handler) (:http config)))]
+        server (run-jetty (wrap-db pipeline)
+                          (assoc (:http config) :join? false))]
     (assoc-in config [:http :server] server)))
 
+(defn stop [config]
+  (.stop (-> config :http :server))
+  config)

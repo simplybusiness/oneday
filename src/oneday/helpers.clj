@@ -1,5 +1,8 @@
 (ns oneday.helpers)
 
+(defn credentials [request]
+  (get-in request [:session "google" :credentials :id_token_decoded]))
+
 (defn format-time [time]
   (let [now (java.util.Date.)
         diff (- (.getTime now) (.getTime time))]
