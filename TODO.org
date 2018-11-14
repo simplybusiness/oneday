@@ -1,0 +1,33 @@
+# TO DO
+
+* authentication (google openid connect)
+** DONE authomatic.oidc
+- acts as middleware
+- handles /login/provider/redirect 
+- needs an http library to do exchange-token-for-code
+- passes other requests through to next handler, after augmenting the
+request to include authn details
+https://developers.google.com/identity/protocols/OpenIDConnect#authenticatingtheuser
+** TODO connect google authentication to local subscriber record
+- authentications table has iss, sub, subscriber-id, display-name 
+and a json field for all the other crap
+- change the domain functions to use subscriber-id instead of handle
+
+* commenting:
+** DONE add comments
+** DONE view comments
+** edit comments?
+*** could do create-new-comment with supersedes
+
+* edit description?
+* deploy
+* delete proposal
+* claiming
+* close proposal
+* make it look prettier
+* email notifications or RSS or webhooks or something
+* personal profile page
+** what they've done
+** what they're interested in
+** what they've sponsored
+  
