@@ -74,11 +74,9 @@
   {:pre [(string? token)
          (.contains token ".")]}
   (let [[header payload sig] (str/split token #"\.")]
-    ;; UNSURE if decodeBase64 returns string
     (json/parse-string (String. (Base64/decodeBase64 payload)) true)))
 
-(defn verify-token-json [json]
-  (println [:json json])
+(defn decode-token-json [json]
   (if-let [decoded
            (and (:id_token json)
                 (decode-jwt (:id_token json)))]
@@ -105,7 +103,7 @@
        (request-for-token-endpoint options)
        http/request
        :body
-       verify-token-json))
+       decode-token-json))
 
 (defn handle-idp-callback [provider-name options request]
   (let [{state "state" code "code"}  (:params request)
