@@ -13,13 +13,17 @@ https://developers.google.com/identity/protocols/OpenIDConnect#authenticatingthe
 and a json field for all the other crap
 - change the domain functions to use subscriber-id instead of handle
 
+** TODO set hd param, check hd claim
+https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
+
 * commenting:
 ** DONE add comments
 ** DONE view comments
 ** edit comments?
 *** could do create-new-comment with supersedes
 
-* edit description?
+* edit description
+this is clearly going to be needed
 * deploy
 * delete proposal
 * claiming
