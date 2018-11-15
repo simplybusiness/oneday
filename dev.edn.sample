@@ -1,0 +1,16 @@
+{:http
+ {:port 3000}
+ :db
+ {:spec "postgresql://onedayuser:onedaypw@localhost/oneday"}
+ :oidc
+ {:google
+  {
+   :discovery-uri "https://accounts.google.com/.well-known/openid-configuration"
+   :client-id "u6562375-thisisnotnotreal@sqo.apps.googleusercontent.com"
+   :client-secret "Ghftygh76yug7t6"
+   :provider-name "google"
+   :redirect-uri "http://localhost:3000/login/google/postauth"
+   }
+  }
+ }
+

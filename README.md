@@ -64,11 +64,15 @@ points.
 
 ## First-time setup
 
+### Dependencies
+
 If you are using the Nix package manager, you can run `nix-shell` in
 this directory to get a development environment instead of resorting
 to Homebrew.  If not, you will need `leiningen` and `postgresql`
 
     brew install leiningen postgresql
+
+### Postgresql
 
 You will need to have a Postgresql server running and configured.
 
@@ -77,6 +81,16 @@ You will need to have a Postgresql server running and configured.
     (psql -d template1 -c "\du" |grep onedayuser) || createuser onedayuser
     (psql -d template1 -c "\l" |grep oneday) || createdb oneday
 
+### Google Identity Platform
+
+Oneday is tied to the Google Identity PLatform so that people can
+login and authenticate against our Google Apps domain.  You need to
+obtain a "client id" and "client secret" by following the steps at
+
+* https://developers.google.com/identity/protocols/OpenIDConnect
+
+Once you have these, copy the file `dev.edn.sample` in this repo to
+`dev.edn` and update the `client-id` and `client-secret` keys.
 
 ## Starting background processes
 
@@ -88,10 +102,10 @@ At the beginning of each development session, just run
 Then run
 
      $ lein repl
-     ondeday.core> (-main)
+     ondeday.core> (-main "dev.edn")
 
 to get a REPL ("Read Eval Print Loop" - an interactive top level like
-the Rails console) and start the HTTP server on port 3000.  You can
+the Rails console), and start the HTTP server on port 3000.  You can
 get fancier: if you speak Emacs my recommendation is to use Cider, but
 this README file is too short to teach you Emacs.
 
