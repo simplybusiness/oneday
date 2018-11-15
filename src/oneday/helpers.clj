@@ -15,3 +15,6 @@
 
 (defn merge-attrs [[tagname attrs & content] more-attrs]
   (into [tagname (merge attrs more-attrs)] content))
+
+(defn request-subscriber-id [request]
+  (-> request :session :subscriber :id))

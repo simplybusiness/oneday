@@ -8,6 +8,7 @@
             oneday.controllers.proposal
             oneday.controllers.static
             oneday.controllers.comment
+            [oneday.domain :as domain]
             [ring.util.response :as rsp]
             [authomatic.oidc :refer [wrap-oidc]]
             [ring.middleware.params :refer [wrap-params]]
@@ -37,11 +38,21 @@
           (:respond view-data)))
       (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
-;; XXX replace this with real auth (jumpcloud, github, google?)
-(defn wrap-auth [h] (fn [r] (h (assoc r :username "daniel-barlow"))))
+(defn wrap-auth [h]
+  (fn [r]
+    ;; find local user from foreign credentials, and put in session to
+    ;; avoid database lookup on every single request
+    (if-let [subscriber (get-in r [:session :subscriber])]
+      (h r)
+      (let [token (get-in r [:session "google" :credentials :id_token_decoded])
+            subscriber (domain/get-subscriber-from-id-token (:db r) token)
+            response (h (assoc-in r [:session :subscriber] subscriber))
+            session (or (:session response) (:session r))]
+        (assoc response :session (assoc session :subscriber subscriber))))))
 
 (defn middlewares [config]
   (-> app-handler
+      (wrap-auth)
       (wrap-oidc (-> config :oidc :google))
       wrap-params
       wrap-content-type

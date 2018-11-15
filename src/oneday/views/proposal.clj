@@ -42,7 +42,7 @@
 (defn dateline [prop]
   [:div.dateline "Proposed "
    (if-let [c(:created_at prop)] (h/format-time c) "")
-   " by " (or (:sponsor prop) "a mystery guest")])
+   " by " (or (:proposer prop) "a mystery guest")])
 
 (defn description [prop]
   (md/md-to-html-string (:description prop)))

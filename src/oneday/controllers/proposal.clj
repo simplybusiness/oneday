@@ -4,6 +4,7 @@
            [jdbc.core :as jdbc]
            [clojure.walk :refer [keywordize-keys]]
            [ring.util.response :as rsp]
+           [oneday.helpers :as h]
            [oneday.views.proposal :as v]))
 
 ;; a controller ns chooses the view to render, and does any
@@ -15,7 +16,8 @@
                (keywordize-keys (:form-params r)))
         success (and
                  p
-                 (d/post-proposal (:db r) (assoc p :sponsor (:username r))))]
+                 (let [p (assoc p :proposer-id (h/request-subscriber-id r))]
+                   (d/post-proposal (:db r) p)))]
     (if success
       {:respond (rsp/redirect (str success) :see-other)}
       ;; not happy about the value I'm sending into this view. It's

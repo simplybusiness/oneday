@@ -8,7 +8,7 @@
 - passes other requests through to next handler, after augmenting the
 request to include authn details
 https://developers.google.com/identity/protocols/OpenIDConnect#authenticatingtheuser
-** TODO connect google authentication to local subscriber record
+** DONE connect google authentication to local subscriber record
 - authentications table has iss, sub, subscriber-id, display-name 
 and a json field for all the other crap
 - change the domain functions to use subscriber-id instead of handle

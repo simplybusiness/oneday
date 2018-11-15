@@ -108,11 +108,11 @@
 (defn handle-idp-callback [provider-name options request]
   (let [{state "state" code "code"}  (:params request)
         required-state (get-in request [:session provider-name :state])]
-    (print [:state state  required-state])
     (if (= state required-state)
       (if-let [token (request-token-for-code options code)]
         (assoc-in (resp/redirect (second (str/split state #":")))
-                  [:session provider-name :credentials] token)
+                  ;; make sure we wipe out state
+                  [:session provider-name] {:credentials token})
         (throw (ex-info "can't get oauth token!" {})))
       (throw (ex-info "received idp callback with incorrect state"
                       {:expected required-state
@@ -128,20 +128,23 @@
         discovered (discover-configuration options)
         options (validate-configuration discovered)]
     (fn [request]
-      (let [creds (get-in request [:session provider-name :credentials])]
+      (let [creds (get-in request [:session provider-name :credentials])
+            state (get-in request [:session provider-name :state])]
         (cond
-          (= (:uri request) "favicon.ico")
-          (handler request)             ; don't care
-          
           ;; already authed, pass through
           creds
           (handler request)
                                                
           ;; handle the post-auth redirect from IdP
           (and (= (.getPath (java.net.URI. redirect-uri)) (:uri request))
-               (get-in request [:session provider-name :state]))
+               state)
           (handle-idp-callback provider-name options request)
 
+          ;; auth in progress for a different request that is not this
+          ;; one, so don't start another
+          state
+          (resp/not-found "cannot serve resource while oauth request pending")
+          
           ;; not authed, no auth in progress - begin the oauth dance
           true
           (redirect-to-idp options request))))))
