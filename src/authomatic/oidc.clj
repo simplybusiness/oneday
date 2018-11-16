@@ -134,6 +134,9 @@
           ;; already authed, pass through
           creds
           (handler request)
+
+          ;; don't auth the health check XXX this is ugly
+          (= (:uri request) "/health") (resp/response  "OK")
                                                
           ;; handle the post-auth redirect from IdP
           (and (= (.getPath (java.net.URI. redirect-uri)) (:uri request))
