@@ -18,14 +18,4 @@
   :plugins [[migratus-lein "0.6.7"]]
   :main ^:skip-aot oneday.core
   :target-path "target/%s"
-  :migratus {:store :database
-             :migration-dir "migrations"
-             ;; this db config is duplicated in core.clj, need to
-             ;; dry it up
-             ; jdbc:postgresql://localhost/oneday?user=onedayuser&password=onedaypw
-             :db {:classname "org.postgresql.Driver"
-                  :subprotocol "postgresql"
-                  :subname "//localhost/oneday"
-                  :user "onedayuser"
-                  :password "onedaypw"}}
   :profiles {:uberjar {:aot :all}})
