@@ -10,6 +10,7 @@
             oneday.controllers.comment
             [oneday.domain :as domain]
             [ring.util.response :as rsp]
+            [cheshire.core :as json]
             [authomatic.oidc :refer [wrap-oidc]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.session :refer [wrap-session]]
@@ -51,6 +52,47 @@
             session (or (:session response) (:session r))]
         (assoc response :session (assoc session :subscriber subscriber))))))
 
+(defn stacktrace-el->map [el]
+  (let [{:keys [className fileName lineNumber methodName]} (bean el)]
+    (map (memfn toString) [className fileName lineNumber methodName])))
+
+(defn error-attributes [ex]
+  (let [m (Throwable->map ex)]
+    {:cause (:cause m)
+     :trace (map stacktrace-el->map (:trace m))
+     :via (map (fn [{ :keys [type message at]}]
+                 {:type (pr-str type)
+                  :message message
+                  :at  (pr-str at)})
+               (:via m))}))
+
+(defn json-log [request response & [exception]]
+  (let [value {:request request
+               :status (:status response)
+               :exception exception}]
+    (println (json/generate-string (into {} (filter val value)))))
+  response)
+
+(defn wrap-catch-and-log [h]
+  (fn [r]
+    (try
+      (json-log r (h r))
+      (catch Throwable ex
+        (let [x (error-attributes ex)]
+          (json-log r
+                    (-> (rsp/response "Internal error.  Clean up on aisle 5")
+                        (rsp/status 500)
+                        (rsp/content-type "text/plain"))
+                    x))))))
+               
+    
+;; (let [handler (wrap-catch-and-log (fn [r] (/ 1 0)))]
+;;   (handler {:uri "/" :request-method :get}))
+
+;; (let [handler (wrap-catch-and-log (fn [r] (rsp/response "dfgg")))]
+;;   (handler {:uri "/" :request-method :get}))
+
+
 (defn middlewares [config]
   (-> app-handler
       (wrap-auth)
@@ -60,7 +102,7 @@
       (wrap-session
        {:cookie-attrs {:secure true}
         :store (cookie-store {:key (-> config :http :session-secret)})})
-      wrap-stacktrace
+      wrap-catch-and-log
       ))
 
 (defn start [config]
