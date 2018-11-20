@@ -47,7 +47,7 @@
   (deep-merge (read-file config-file) (read-env env-prefix)))
 
 
-(def secret-paths [[:http :cookie-secret]
+(def secret-paths [[:http :session-secret]
                    [:db :spec]
                    [:oidc :google :client-secret]])
 
@@ -60,7 +60,7 @@
   (let [config
         {:http
          {:port 3000
-          :cookie-secret 'aaaaaaaaaaaaaaaa'
+          :session-secret 'aaaaaaaaaaaaaaaa'
           }
          :db
          {:spec "postgresql://onedayuser:onedaypw@localhost/oneday"}
@@ -76,7 +76,7 @@
           }
          }
         redacted (redact-config config)]
-    (is (= :redacted (get-in redacted [:http :cookie-secret])))
+    (is (= :redacted (get-in redacted [:http :session-secret])))
     (is (= :redacted (get-in redacted [:db :spec])))
     (is (= :redacted (get-in redacted [:oidc :google :client-secret])))
     (is (= (get-in redacted [:http :port]) (get-in config [:http :port])))))
