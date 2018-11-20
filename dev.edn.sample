@@ -1,5 +1,7 @@
 {:http
- {:port 3000 :session-secret "0123456789abcdef"}
+ {:port 3000
+  :secure false ; for cookies, need to know if using https
+  :session-secret "0123456789abcdef"}
  :db
  {:spec "postgresql://onedayuser:onedaypw@localhost/oneday"}
  :oidc
