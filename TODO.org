@@ -16,6 +16,7 @@ and a json field for all the other crap
 ** TODO set hd param, check hd claim
 https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
 
+** review https://tools.ietf.org/id/draft-ietf-oauth-security-topics-05.html
 * commenting:
 ** DONE add comments
 ** DONE view comments
@@ -25,7 +26,10 @@ https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuri
 * edit description
 this is clearly going to be needed
 * deploy
-* delete proposal
+** DONE plausible dev deploy
+** live deploy
+* define proposal lifetime
+- proposed/accepted/completed/superseded, or something
 * claiming
 * close proposal
 * make it look prettier
