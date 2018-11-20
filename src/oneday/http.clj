@@ -13,6 +13,7 @@
             [authomatic.oidc :refer [wrap-oidc]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.session :refer [wrap-session]]
+            [ring.middleware.session.cookie :refer [cookie-store]]
             [ring.middleware.content-type :refer (wrap-content-type)]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.adapter.jetty :refer [run-jetty]]))
@@ -56,7 +57,9 @@
       (wrap-oidc (-> config :oidc :google))
       wrap-params
       wrap-content-type
-      wrap-session
+      (wrap-session
+       {:cookie-attrs {:secure true}
+        :store (cookie-store {:key (-> config :http :session-secret)})})
       wrap-stacktrace
       ))
 
