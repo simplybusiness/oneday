@@ -16,8 +16,9 @@
             [ring.middleware.session :refer [wrap-session]]
             [ring.middleware.session.cookie :refer [cookie-store]]
             [ring.middleware.content-type :refer (wrap-content-type)]
-            [ring.middleware.stacktrace :refer [wrap-stacktrace]]
-            [ring.adapter.jetty :refer [run-jetty]]))
+            [oneday.ring-log :as ring-log]
+            [ring.adapter.jetty :refer [run-jetty]]
+            [clojure.test :as test :refer [is deftest with-test]]))
 
 (def routes
   ["/" {["static/" [ #"[a-zA-Z0-9/_\.-]+" :path]]
@@ -52,46 +53,6 @@
             session (or (:session response) (:session r))]
         (assoc response :session (assoc session :subscriber subscriber))))))
 
-(defn stacktrace-el->map [el]
-  (let [{:keys [className fileName lineNumber methodName]} (bean el)]
-    (map (memfn toString) [className fileName lineNumber methodName])))
-
-(defn error-attributes [ex]
-  (let [m (Throwable->map ex)]
-    {:cause (:cause m)
-     :trace (map stacktrace-el->map (:trace m))
-     :via (map (fn [{ :keys [type message at]}]
-                 {:type (pr-str type)
-                  :message message
-                  :at  (pr-str at)})
-               (:via m))}))
-
-(defn json-log [request response & [exception]]
-  (let [value {:request request
-               :status (:status response)
-               :exception exception}]
-    (println (json/generate-string (into {} (filter val value)))))
-  response)
-
-(defn wrap-catch-and-log [h]
-  (fn [r]
-    (try
-      (json-log r (h r))
-      (catch Throwable ex
-        (let [x (error-attributes ex)]
-          (json-log r
-                    (-> (rsp/response "Internal error.  Clean up on aisle 5")
-                        (rsp/status 500)
-                        (rsp/content-type "text/plain"))
-                    x))))))
-               
-    
-;; (let [handler (wrap-catch-and-log (fn [r] (/ 1 0)))]
-;;   (handler {:uri "/" :request-method :get}))
-
-;; (let [handler (wrap-catch-and-log (fn [r] (rsp/response "dfgg")))]
-;;   (handler {:uri "/" :request-method :get}))
-
 
 (defn middlewares [config]
   (-> app-handler
@@ -100,9 +61,9 @@
       wrap-params
       wrap-content-type
       (wrap-session
-       {:cookie-attrs {:secure true}
+       {:cookie-attrs {:secure (-> config :http :secure)}
         :store (cookie-store {:key (-> config :http :session-secret)})})
-      wrap-catch-and-log
+      (ring-log/wrap-catch-and-log {:log-stream *err* :log-format :json})
       ))
 
 (defn start [config]
