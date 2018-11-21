@@ -52,6 +52,9 @@
                    [:oidc :google :client-secret]])
 
 (defn redact-config [config]
+  "Given a configuration map, replace the sensitive/secret values
+(as specified by `secret-paths` with the key `:redacted` so that it
+can safely be e.g. printed to a log file"
   (reduce (fn [c path] (assoc-in c path :redacted))
           config
           secret-paths))
