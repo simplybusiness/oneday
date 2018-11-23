@@ -12,6 +12,7 @@
         fields (assoc params
                       :interested (not (empty? (:interested params)))
                       :sponsor (not (empty? (:sponsor params)))
+                      :demo (not (empty? (:demo params)))
                       :kudosh (Integer/parseInt (or (:kudosh params) "0"))
                       :author-id (-> req :session :subscriber :id))]
     (if-let [comment (d/add-comment (:db req) proposal-id fields)]

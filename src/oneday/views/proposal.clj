@@ -63,12 +63,18 @@
 
 (defn show-comment [c]
   (let [interested? (:interested c)
+        demo? (:demo c)
         sponsor? (:sponsor c)]
-    [:div.comment {:class (if interested? "interested" "drive-by")}
-     [:div.attribution {} (:author c)
-      (if interested? " (who might work on it!) " "")
-      " wrote at "
-      (h/format-time (:created_at c)) ":"]
+    [:div.comment
+     {:class (cond interested? "interested" demo? "demo" :else "drive-by")}
+     [:div.attribution {} 
+      "At " (h/format-time (:created_at c)) ", "
+      (:author c)
+      (cond
+        interested? " said they were interested in working on it"
+        demo? " requested a review"
+        :else " wrote")
+       ":"]
      [:div.body (:text c)]]))
 
 (defn show [value]
@@ -112,6 +118,8 @@
          (kudosh "10") " "
          (kudosh "20") " "         
          (kudosh "40") " kudosh"]
+        [:div.field
+         [:label {} (f/check-box :demo) " I have been working on this: please review my approach /solution!"]]        
         [:div.field [:button {} "Add comment"]]
 
         ]]])))

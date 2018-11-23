@@ -54,7 +54,7 @@
         sponsors
         (jdbc/fetch (:db r) ["select sum(points),s.* from kudosh k join subscriber s on s.id=k.sponsor_id  where proposal_id=? group by s.id" id])
         comments
-        (jdbc/fetch (:db r) ["select c.*,s.handle as author from comment c join subscriber s on c.author_id=s.id where proposal_id=? and text<>'' order by created_at desc" id])
+        (jdbc/fetch (:db r) ["select c.*,s.handle as author from comment c join subscriber s on c.author_id=s.id where proposal_id=? and text<>'' order by created_at " id])
         ]
     {:view v/show
      :proposal proposal

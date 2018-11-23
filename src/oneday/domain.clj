@@ -16,10 +16,11 @@
                                       proposal-id points sponsor-id]))))
 
 (defn add-comment [db proposal-id comment]
-  (let [res (jdbc/fetch db ["insert into comment (proposal_id, text, interested, author_id) values (?,?,?, ?) returning id"
+  (let [res (jdbc/fetch db ["insert into comment (proposal_id, text, interested, demo, author_id) values (?,?,?,?, ?) returning id"
                             proposal-id
                             (:text comment)
-                            (:interested comment) 
+                            (:interested comment)
+                            (:demo comment)
                             (:author-id comment)])]
     (when-let [id (:id (first  res))]
       (and (or (not (:sponsor comment))
