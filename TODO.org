@@ -32,7 +32,20 @@ this is clearly going to be needed
 ** live deploy
 
 * define proposal lifetime
-- proposed/accepted/completed/superseded, or something
+- it is proposed
+- it may be edited
+- one or more people express an interest
+- n times { one or ore of those people demonstrate their solution }
+- the proposer agrees it is completed
+(how does this work with more than one sponsor?  discussion may 
+happen but easiest to say that the others delegate to the proposer)
+- if e.g. the work is superseded by events the proposer may withdraw it
+
+can someone who has not expressed interest do a demo?  I don't see why not
+
+
+
+
 
 * make it look prettier
 * email notifications or RSS or webhooks or something
