@@ -19,18 +19,20 @@
       #_ (= (:id subscriber) 1)))
 
 (defn post-proposal [db p]
-  (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity,proposer_id) values (?,?,?, ?) returning id"
+  (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity,status,proposer_id) values (?,?,?, ?::proposal_status,?) returning id"
                             (:title p)
                             (:description p) 
                             (:complexity p)
+                            (:status p)
                             (:proposer-id p)])]
     (:id (first  res))))
 
 (defn update-proposal [db id p]
-  (let [res (jdbc/fetch db ["update proposal set title=?,description=?,complexity=?,updated=now() where id=? returning id"
+  (let [res (jdbc/fetch db ["update proposal set title=?,description=?,complexity=?,status=?::proposal_status,updated=now() where id=? returning id"
                             (:title p)
                             (:description p) 
                             (:complexity p)
+                            (:status p)
                             id])]
     (:id (first  res))))
 

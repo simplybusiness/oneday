@@ -28,7 +28,15 @@
       "Complicated"
       "Complex"
       "Chaotic"]
-     (:complexity p))]
+     (:complexity p))
+    [:label {:for :status} "Status"]
+    (f/drop-down
+     :status
+     ["Draft"
+      "Open"
+      "Completed"
+      "Withdrawn"]
+     (or (:status p) "Open"))]
    [:button {} "Post"]))
   
 (defn post [state]
