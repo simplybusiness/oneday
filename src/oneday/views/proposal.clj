@@ -51,10 +51,13 @@
   [:a {:href (:id p)}
    (:title p)])
 
-(defn dateline [prop]
+(defn dateline [prop & [edit-url]]
   [:div.dateline "Proposed "
    (if-let [c(:created_at prop)] (h/format-time c) "")
-   " by " (or (:proposer prop) "a mystery guest")])
+   " by " (or (:proposer prop) "a mystery guest")
+   (if edit-url
+     [:span " [ " [:a {:href edit-url} "edit" ] " ]"])
+   ])
 
 (defn description [prop]
   (md/md-to-html-string (:description prop)))
@@ -101,7 +104,7 @@
      (str "oneday - " (:title prop))
      [:div.proposal {}
       [:h2 (:title prop)]
-      (dateline prop)
+      (dateline prop (:edit-url value))
       [:blockquote (description prop)]
       (when-let [sponsors (seq (:sponsors value))]
         [:div.sponsors {}

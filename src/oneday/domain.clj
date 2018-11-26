@@ -14,6 +14,10 @@
                 " ) proposal where id = ?") id])))
   
 
+(defn may-update? [subscriber proposal]
+  (or (= (:id subscriber) (:proposer_id proposal))
+      #_ (= (:id subscriber) 1)))
+
 (defn post-proposal [db p]
   (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity,proposer_id) values (?,?,?, ?) returning id"
                             (:title p)

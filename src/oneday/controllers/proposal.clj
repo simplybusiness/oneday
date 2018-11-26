@@ -46,6 +46,8 @@
 (defn show [r route]
   (let [id (-> route :route-params :id Integer/parseInt)
         proposal (d/get-proposal-by-id  (:db r) id)
+        editable? (d/may-update? {:id (h/request-subscriber-id r)}
+                                 proposal)
         sponsors
         (jdbc/fetch (:db r) ["select sum(points),s.* from kudosh k join subscriber s on s.id=k.sponsor_id  where proposal_id=? group by s.id" id])
         comments
@@ -54,14 +56,23 @@
     {:view v/show
      :proposal proposal
      :sponsors sponsors
+     :edit-url (and editable? (str (:uri r) "/edit"))
      :comments comments}))
 
 (defn edit [r route]
   (let [id (-> route :route-params :id Integer/parseInt)
         p (and (= (:request-method r) :post)
-               (keywordize-keys (:form-params r)))]
-    ;; XXX need to validate current user is the proposer
-    ;; (or otherwise has permissions to update others' proposals)
-    (if-let [success (and p (d/update-proposal (:db r) id p))]
-      {:redirect show :id id}
-      {:view v/edit :params (d/get-proposal-by-id (:db r) id)})))
+               (keywordize-keys (:form-params r)))
+        before (d/get-proposal-by-id (:db r) id)
+        editable? (d/may-update? {:id (h/request-subscriber-id r)}
+                                 before)]
+    (if (d/may-update? {:id (h/request-subscriber-id r)}
+                       before)
+      (if-let [success (and p (d/update-proposal (:db r) id p))]
+        {:redirect show :id id}
+        {:view v/edit :params (d/get-proposal-by-id (:db r) id)})
+      {:respond (-> "Current subscriber may not edit"
+                    rsp/response
+                    (rsp/status 403)
+                    (rsp/content-type "text/plain"))})))
+
