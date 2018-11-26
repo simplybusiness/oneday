@@ -19,7 +19,7 @@
                  (let [p (assoc p :proposer-id (h/request-subscriber-id r))]
                    (d/post-proposal (:db r) p)))]
     (if success
-      {:respond (rsp/redirect (str success) :see-other)}
+      {:redirect show :id success}
       ;; not happy about the value I'm sending into this view. It's
       ;; maybe a special case because there is yet no entity associated
       ;; with the view - just the stuff that the user keyed in but

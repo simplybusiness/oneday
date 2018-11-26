@@ -39,7 +39,13 @@
             view-data (controller r route)]
         (if-let [view (:view view-data)]
           (rsp/charset (view (dissoc view-data :view)) "UTF-8")
-          (:respond view-data)))
+          (if-let [handler (:redirect view-data)]
+            (let [path
+                  (bd/unmatch-pair routes
+                                   {:handler handler
+                                    :params (dissoc view-data :redirect)})]
+              (rsp/redirect path :see-other))
+            (:respond view-data))))
       (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
 (defn wrap-auth [h]
