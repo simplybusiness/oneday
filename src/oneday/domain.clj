@@ -1,7 +1,18 @@
 (ns oneday.domain
   (:require [cheshire.core :as json]
             [clojure.string :as str]
+            [clojure.java.io :as io]
             [jdbc.core :as jdbc]))
+
+(def proposal-sql (slurp (io/resource "sql/proposal-frag.sql")))
+
+(defn get-proposal-by-id [db id]
+  (first (jdbc/fetch
+          db
+          [(str "select * from ("
+                proposal-sql
+                " ) proposal where id = ?") id])))
+  
 
 (defn post-proposal [db p]
   (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity,proposer_id) values (?,?,?, ?) returning id"
