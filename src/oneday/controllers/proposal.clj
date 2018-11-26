@@ -45,7 +45,7 @@
 
 (defn show [r route]
   (let [id (-> route :route-params :id Integer/parseInt)
-        proposal (d/get-proposal-by-id id)
+        proposal (d/get-proposal-by-id  (:db r) id)
         sponsors
         (jdbc/fetch (:db r) ["select sum(points),s.* from kudosh k join subscriber s on s.id=k.sponsor_id  where proposal_id=? group by s.id" id])
         comments
