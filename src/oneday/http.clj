@@ -4,6 +4,7 @@
 (ns oneday.http
   (:require [bidi.bidi :as bd]
             [bidi.ring :refer [->Resources]]
+            [clojure.java.io :as io]
             [oneday.page :refer [page]]
             oneday.controllers.proposal
             oneday.controllers.static
@@ -68,10 +69,16 @@
 
 (defn start [config]
   (let [db (-> config :db :connection)
-        pipeline (middlewares config)
+        log-stream (if-let [f (-> config :http :log-file-name)]
+                     (io/writer (io/file f) :append true)
+                     *err*)
+        pipeline (binding [*err* log-stream] (middlewares config))
         wrap-db (fn [h] (fn [r] (h (assoc r :db db))))
         server (run-jetty (wrap-db pipeline)
                           (assoc (:http config) :join? false))]
+    (binding [*out* log-stream]
+      (println (json/generate-string {:timestamp (java.util.Date.)
+                                      :message "HTTP server ready"})))
     (assoc-in config [:http :server] server)))
 
 (defn stop [config]
