@@ -17,34 +17,37 @@ and a json field for all the other crap
 https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
 ** review https://tools.ietf.org/id/draft-ietf-oauth-security-topics-05.html
 
+
 * commenting:
 ** DONE add comments
 ** DONE view comments
-** edit comments?
-*** could do create-new-comment with supersedes
+** edit comments? nope, add another
 
-* edit description
-this is clearly going to be needed
+
+* TODO edit proposal
+** add 'status' field
+** change description
+** change status (open/completed/withdrawn)
+
 * deploy
 ** DONE plausible dev deploy
 ** TODO hide the postgres password
-** find out why we're writing empty log lines
+** DONE find out why we're writing empty log lines
+- need to change "request" to something else
 ** live deploy
 
-* define proposal lifetime
+** DONE draw picture of proposal lifetime
 - it is proposed
 - it may be edited
 - one or more people express an interest
 - n times { one or ore of those people demonstrate their solution }
-- the proposer agrees it is completed
+- the proposer (and ideally also sponsors) agree it is completed
 (how does this work with more than one sponsor?  discussion may 
 happen but easiest to say that the others delegate to the proposer)
 - if e.g. the work is superseded by events the proposer may withdraw it
+- any options for actual integration with kudosh platform?
 
 can someone who has not expressed interest do a demo?  I don't see why not
-
-
-
 
 
 * make it look prettier
