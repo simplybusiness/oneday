@@ -23,11 +23,12 @@ https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuri
 ** DONE view comments
 ** edit comments? nope, add another
 
+* DONE edit proposal
+** DONE add 'status' field   draft/open/complete/superseded
+** DONE change description
+** DONE change status (open/completed/withdrawn)
+** DONE permissions: may subscriber S edit proposal P?
 
-* TODO edit proposal
-** add 'status' field
-** change description
-** change status (open/completed/withdrawn)
 
 * deploy
 ** DONE plausible dev deploy
@@ -36,22 +37,23 @@ https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuri
 - need to change "request" to something else
 ** live deploy
 
-** DONE draw picture of proposal lifetime
-- it is proposed
-- it may be edited
-- one or more people express an interest
-- n times { one or ore of those people demonstrate their solution }
-- the proposer (and ideally also sponsors) agree it is completed
-(how does this work with more than one sponsor?  discussion may 
-happen but easiest to say that the others delegate to the proposer)
-- if e.g. the work is superseded by events the proposer may withdraw it
-- any options for actual integration with kudosh platform?
-
-can someone who has not expressed interest do a demo?  I don't see why not
-
+* proposal lifetime management
+** DONE allow changing proposal status
+** draft proposal is unpublished & may not be commented/worked on
+** open status is default
+** completed/withdrawn status may not be demoed
+** sponsors are notified about demos
+** interesteds are notified about changes
 
 * make it look prettier
-* email notifications or RSS or webhooks or something
+
+* figure out notification channel
+** maybe email
+** maybe rss
+** some other slack integration?
+** web notifications api
+- https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
+
 * personal profile page
 ** what they've done
 ** what they're interested in
