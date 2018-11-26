@@ -20,10 +20,11 @@
                (:via m))}))
 
 (defn log-entry-payload [request response exception]
-  (let [value {:request (select-keys request [:uri :remote-addr :headers
-                                              :server-port :server-name
-                                              :query-string
-                                              :scheme :request-method])
+  (let [value {:http-request
+               (select-keys request [:uri :remote-addr :headers
+                                     :server-port :server-name
+                                     :query-string
+                                     :scheme :request-method])
                :status (:status response)
                :timestamp (java.util.Date.)
                :exception exception}]
