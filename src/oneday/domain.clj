@@ -22,6 +22,14 @@
                             (:proposer-id p)])]
     (:id (first  res))))
 
+(defn update-proposal [db id p]
+  (let [res (jdbc/fetch db ["update proposal set title=?,description=?,complexity=?,updated=now() where id=? returning id"
+                            (:title p)
+                            (:description p) 
+                            (:complexity p)
+                            id])]
+    (:id (first  res))))
+
 (defn add-kudosh [db proposal-id points sponsor-id]
   (:created_at (first (jdbc/fetch db ["insert into kudosh (proposal_id, points, sponsor_id) values (?,?, ?) returning created_at"
                                       proposal-id points sponsor-id]))))

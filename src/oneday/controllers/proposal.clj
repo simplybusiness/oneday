@@ -55,3 +55,13 @@
      :proposal proposal
      :sponsors sponsors
      :comments comments}))
+
+(defn edit [r route]
+  (let [id (-> route :route-params :id Integer/parseInt)
+        p (and (= (:request-method r) :post)
+               (keywordize-keys (:form-params r)))]
+    ;; XXX need to validate current user is the proposer
+    ;; (or otherwise has permissions to update others' proposals)
+    (if-let [success (and p (d/update-proposal (:db r) id p))]
+      {:redirect show :id id}
+      {:view v/edit :params (d/get-proposal-by-id (:db r) id)})))

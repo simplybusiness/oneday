@@ -7,33 +7,45 @@
 
 (def placeholder-descr (slurp (io/resource "placeholder-description.md")))
 
+(defn proposal-form [p]
+  (f/form-to
+   [:post ""]
+   [:div {}
+    [:label {:for :title} "Title"]
+    (f/text-field :title (:title p))]
+   [:div {}
+    [:label {:for :description :title "(markdown ok)"}
+     "Description" ]
+    (f/text-area :description (:description p))]
+   [:div {}
+    [:label {:for :tags} "Tags"]
+    (f/text-field :tags (:tags p))]
+   [:div {}
+    [:label {:for :complexity} "Complexity"]
+    (f/drop-down
+     :complexity
+     ["Obvious"
+      "Complicated"
+      "Complex"
+      "Chaotic"]
+     (:complexity p))]
+   [:button {} "Post"]))
+  
 (defn post [state]
   (let [p (merge  {:description placeholder-descr} (or (:params state) {}))]
     (page "Post a proposal"
           [:div.proposal.post-proposal {}
            [:h2 "Post a proposal"]
-           (f/form-to
-            [:post ""]
-            [:div {}
-             [:label {:for :title} "Title"]
-             (f/text-field :title (:title p))]
-            [:div {}
-             [:label {:for :description :title "(markdown ok)"}
-              "Description" ]
-             (f/text-area :description (:description p))]
-            [:div {}
-             [:label {:for :tags} "Tags"]
-             (f/text-field :tags (:tags p))]
-            [:div {}
-             [:label {:for :complexity} "Complexity"]
-             (f/drop-down
-              :complexity
-              ["Obvious"
-               "Complicated"
-               "Complex"
-               "Chaotic"]
-              (:complexity p))]
-            [:button {} "Post"])])))
+           (proposal-form p)
+           ])))
+
+(defn edit [state]
+  (let [p (merge  {:description placeholder-descr} (or (:params state) {}))]
+    (page "Edit proposal"
+          [:div.proposal.post-proposal {}
+           [:h2 "Edit proposal"]
+           (proposal-form p)
+           ])))
 
 (defn link-to [p]
   [:a {:href (:id p)}

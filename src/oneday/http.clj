@@ -28,6 +28,7 @@
         {"" #'oneday.controllers.proposal/index
          "post" #'oneday.controllers.proposal/post
          [:id] #'oneday.controllers.proposal/show
+         [:id "/edit"] #'oneday.controllers.proposal/edit
          [:id "/comments/new"] #'oneday.controllers.comment/new
          }}])
 
