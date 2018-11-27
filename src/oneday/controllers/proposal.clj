@@ -11,20 +11,7 @@
 ;; lookups (local database or external services) to get the
 ;; data that view will need
 
-(defn post [r _]
-  (let [p (and (= (:request-method r) :post)
-               (keywordize-keys (:form-params r)))
-        success (and
-                 p
-                 (let [p (assoc p :proposer-id (h/request-subscriber-id r))]
-                   (d/post-proposal (:db r) p)))]
-    (if success
-      {:redirect show :id success}
-      ;; not happy about the value I'm sending into this view. It's
-      ;; maybe a special case because there is yet no entity associated
-      ;; with the view - just the stuff that the user keyed in but
-      ;; which would not validate as a legitimate proposal
-      {:view v/post :params p})))
+
 
 ;; THINKABOUTME there's quite a lot of sql and jdbc grunge in this
 ;; file which feels like it should be moved into a db interface of
@@ -58,6 +45,21 @@
      :sponsors sponsors
      :edit-url (and editable? (str (:uri r) "/edit"))
      :comments comments}))
+
+(defn post [r _]
+  (let [p (and (= (:request-method r) :post)
+               (keywordize-keys (:form-params r)))
+        success (and
+                 p
+                 (let [p (assoc p :proposer-id (h/request-subscriber-id r))]
+                   (d/post-proposal (:db r) p)))]
+    (if success
+      {:redirect show :id success}
+      ;; not happy about the value I'm sending into this view. It's
+      ;; maybe a special case because there is yet no entity associated
+      ;; with the view - just the stuff that the user keyed in but
+      ;; which would not validate as a legitimate proposal
+      {:view v/post :params p})))
 
 (defn edit [r route]
   (let [id (-> route :route-params :id Integer/parseInt)
