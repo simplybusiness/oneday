@@ -10,6 +10,12 @@ div.comments div.comment {
     padding: 6px;
     background-color: #eee;
 }
+div.comments div.demo {
+    background-color: #fad;
+    border-style: dotted;
+    border-width: 4px;
+    border-color: #888;
+}
 div.comments div.interested {
     background-color: #dfd;
 }

@@ -7,42 +7,65 @@
 
 (def placeholder-descr (slurp (io/resource "placeholder-description.md")))
 
+(defn proposal-form [p]
+  (f/form-to
+   [:post ""]
+   [:div {}
+    [:label {:for :title} "Title"]
+    (f/text-field :title (:title p))]
+   [:div {}
+    [:label {:for :description :title "(markdown ok)"}
+     "Description" ]
+    (f/text-area :description (:description p))]
+   [:div {}
+    [:label {:for :tags} "Tags"]
+    (f/text-field :tags (:tags p))]
+   [:div {}
+    [:label {:for :complexity} "Complexity"]
+    (f/drop-down
+     :complexity
+     ["Obvious"
+      "Complicated"
+      "Complex"
+      "Chaotic"]
+     (:complexity p))
+    [:label {:for :status} "Status"]
+    (f/drop-down
+     :status
+     ["Draft"
+      "Open"
+      "Completed"
+      "Withdrawn"]
+     (or (:status p) "Open"))]
+   [:button {} "Post"]))
+  
 (defn post [state]
   (let [p (merge  {:description placeholder-descr} (or (:params state) {}))]
     (page "Post a proposal"
           [:div.proposal.post-proposal {}
            [:h2 "Post a proposal"]
-           (f/form-to
-            [:post ""]
-            [:div {}
-             [:label {:for :title} "Title"]
-             (f/text-field :title (:title p))]
-            [:div {}
-             [:label {:for :description :title "(markdown ok)"}
-              "Description" ]
-             (f/text-area :description (:description p))]
-            [:div {}
-             [:label {:for :tags} "Tags"]
-             (f/text-field :tags (:tags p))]
-            [:div {}
-             [:label {:for :complexity} "Complexity"]
-             (f/drop-down
-              :complexity
-              ["Obvious"
-               "Complicated"
-               "Complex"
-               "Chaotic"]
-              (:complexity p))]
-            [:button {} "Post"])])))
+           (proposal-form p)
+           ])))
+
+(defn edit [state]
+  (let [p (merge  {:description placeholder-descr} (or (:params state) {}))]
+    (page "Edit proposal"
+          [:div.proposal.post-proposal {}
+           [:h2 "Edit proposal"]
+           (proposal-form p)
+           ])))
 
 (defn link-to [p]
   [:a {:href (:id p)}
    (:title p)])
 
-(defn dateline [prop]
+(defn dateline [prop & [edit-url]]
   [:div.dateline "Proposed "
    (if-let [c(:created_at prop)] (h/format-time c) "")
-   " by " (or (:proposer prop) "a mystery guest")])
+   " by " (or (:proposer prop) "a mystery guest")
+   (if edit-url
+     [:span " [ " [:a {:href edit-url} "edit" ] " ]"])
+   ])
 
 (defn description [prop]
   (md/md-to-html-string (:description prop)))
@@ -55,20 +78,26 @@
    [:p {:align :right
         :style "font-weight: bold"}
     [:a {:href (:id prop)}
-     (:kudosh prop) " kudosh"]
-    " "
+     (:sponsors_count prop) " sponsors"]
+    ", "
     [:a {:href (:id prop)}   
      (:comments prop) " comments"]]
    ])
 
 (defn show-comment [c]
   (let [interested? (:interested c)
+        demo? (:demo c)
         sponsor? (:sponsor c)]
-    [:div.comment {:class (if interested? "interested" "drive-by")}
-     [:div.attribution {} (:author c)
-      (if interested? " (who might work on it!) " "")
-      " wrote at "
-      (h/format-time (:created_at c)) ":"]
+    [:div.comment
+     {:class (cond interested? "interested" demo? "demo" :else "drive-by")}
+     [:div.attribution {} 
+      "At " (h/format-time (:created_at c)) ", "
+      (:author c)
+      (cond
+        interested? " said they were interested in working on it"
+        demo? " requested a review"
+        :else " wrote")
+       ":"]
      [:div.body (:text c)]]))
 
 (defn show [value]
@@ -83,7 +112,7 @@
      (str "oneday - " (:title prop))
      [:div.proposal {}
       [:h2 (:title prop)]
-      (dateline prop)
+      (dateline prop (:edit-url value))
       [:blockquote (description prop)]
       (when-let [sponsors (seq (:sponsors value))]
         [:div.sponsors {}
@@ -112,6 +141,8 @@
          (kudosh "10") " "
          (kudosh "20") " "         
          (kudosh "40") " kudosh"]
+        [:div.field
+         [:label {} (f/check-box :demo) " I have been working on this: please review my approach /solution!"]]        
         [:div.field [:button {} "Add comment"]]
 
         ]]])))

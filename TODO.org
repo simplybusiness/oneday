@@ -17,25 +17,43 @@ and a json field for all the other crap
 https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
 ** review https://tools.ietf.org/id/draft-ietf-oauth-security-topics-05.html
 
+
 * commenting:
 ** DONE add comments
 ** DONE view comments
-** edit comments?
-*** could do create-new-comment with supersedes
+** edit comments? nope, add another
 
-* edit description
-this is clearly going to be needed
+* DONE edit proposal
+** DONE add 'status' field   draft/open/complete/superseded
+** DONE change description
+** DONE change status (open/completed/withdrawn)
+** DONE permissions: may subscriber S edit proposal P?
+
+
 * deploy
 ** DONE plausible dev deploy
 ** TODO hide the postgres password
-** find out why we're writing empty log lines
+** DONE find out why we're writing empty log lines
+- need to change "request" to something else
 ** live deploy
 
-* define proposal lifetime
-- proposed/accepted/completed/superseded, or something
+* proposal lifetime management
+** DONE allow changing proposal status
+** draft proposal is unpublished & may not be commented/worked on
+** open status is default
+** completed/withdrawn status may not be demoed
+** sponsors are notified about demos
+** interesteds are notified about changes
 
 * make it look prettier
-* email notifications or RSS or webhooks or something
+
+* figure out notification channel
+** maybe email
+** maybe rss
+** some other slack integration?
+** web notifications api
+- https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
+
 * personal profile page
 ** what they've done
 ** what they're interested in

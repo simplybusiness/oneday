@@ -3,14 +3,16 @@
             [cheshire.core :as json]
             [clojure.test :as test :refer [is deftest with-test]]))
 
-(defn stacktrace-el->map [el]
+(defn stacktrace-el->array [el]
   (let [{:keys [className fileName lineNumber methodName]} (bean el)]
-    (map (memfn toString) [className fileName lineNumber methodName])))
+    (map (fn [v] (and v (.toString v)))
+         [className fileName lineNumber methodName])))
 
 (defn error-attributes [ex]
   (let [m (Throwable->map ex)]
     {:cause (:cause m)
-     :trace (map stacktrace-el->map (:trace m))
+     :trace (if-let [trace (:trace m)]
+              (map stacktrace-el->array trace))
      :via (map (fn [{ :keys [type message at]}]
                  {:type (pr-str type)
                   :message message
@@ -18,10 +20,11 @@
                (:via m))}))
 
 (defn log-entry-payload [request response exception]
-  (let [value {:request (select-keys request [:uri :remote-addr :headers
-                                              :server-port :server-name
-                                              :query-string
-                                              :scheme :request-method])
+  (let [value {:http-request
+               (select-keys request [:uri :remote-addr :headers
+                                     :server-port :server-name
+                                     :query-string
+                                     :scheme :request-method])
                :status (:status response)
                :timestamp (java.util.Date.)
                :exception exception}]

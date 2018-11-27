@@ -1,14 +1,39 @@
 (ns oneday.domain
   (:require [cheshire.core :as json]
             [clojure.string :as str]
+            [clojure.java.io :as io]
             [jdbc.core :as jdbc]))
 
+(def proposal-sql (slurp (io/resource "sql/proposal-frag.sql")))
+
+(defn get-proposal-by-id [db id]
+  (first (jdbc/fetch
+          db
+          [(str "select * from ("
+                proposal-sql
+                " ) proposal where id = ?") id])))
+  
+
+(defn may-update? [subscriber proposal]
+  (or (= (:id subscriber) (:proposer_id proposal))
+      #_ (= (:id subscriber) 1)))
+
 (defn post-proposal [db p]
-  (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity,proposer_id) values (?,?,?, ?) returning id"
+  (let [res (jdbc/fetch db ["insert into proposal (title,description,complexity,status,proposer_id) values (?,?,?, ?::proposal_status,?) returning id"
                             (:title p)
                             (:description p) 
                             (:complexity p)
+                            (:status p)
                             (:proposer-id p)])]
+    (:id (first  res))))
+
+(defn update-proposal [db id p]
+  (let [res (jdbc/fetch db ["update proposal set title=?,description=?,complexity=?,status=?::proposal_status,updated=now() where id=? returning id"
+                            (:title p)
+                            (:description p) 
+                            (:complexity p)
+                            (:status p)
+                            id])]
     (:id (first  res))))
 
 (defn add-kudosh [db proposal-id points sponsor-id]
@@ -16,10 +41,11 @@
                                       proposal-id points sponsor-id]))))
 
 (defn add-comment [db proposal-id comment]
-  (let [res (jdbc/fetch db ["insert into comment (proposal_id, text, interested, author_id) values (?,?,?, ?) returning id"
+  (let [res (jdbc/fetch db ["insert into comment (proposal_id, text, interested, demo, author_id) values (?,?,?,?, ?) returning id"
                             proposal-id
                             (:text comment)
-                            (:interested comment) 
+                            (:interested comment)
+                            (:demo comment)
                             (:author-id comment)])]
     (when-let [id (:id (first  res))]
       (and (or (not (:sponsor comment))

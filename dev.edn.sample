@@ -1,5 +1,9 @@
 {:http
  {:port 3000
+  ;; http logging defaults to standard error if not specified, but
+  ;; this doesn't seem to work well under cider, so we use this
+  ;; option to send it to a file
+  :log-file-name "http.json.log"
   :secure false ; for cookies, need to know if using https
   :session-secret "0123456789abcdef"}
  :db

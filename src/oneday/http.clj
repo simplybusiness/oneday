@@ -4,6 +4,7 @@
 (ns oneday.http
   (:require [bidi.bidi :as bd]
             [bidi.ring :refer [->Resources]]
+            [clojure.java.io :as io]
             [oneday.page :refer [page]]
             oneday.controllers.proposal
             oneday.controllers.static
@@ -27,6 +28,7 @@
         {"" #'oneday.controllers.proposal/index
          "post" #'oneday.controllers.proposal/post
          [:id] #'oneday.controllers.proposal/show
+         [:id "/edit"] #'oneday.controllers.proposal/edit
          [:id "/comments/new"] #'oneday.controllers.comment/new
          }}])
 
@@ -38,7 +40,13 @@
             view-data (controller r route)]
         (if-let [view (:view view-data)]
           (rsp/charset (view (dissoc view-data :view)) "UTF-8")
-          (:respond view-data)))
+          (if-let [handler (:redirect view-data)]
+            (let [path
+                  (bd/unmatch-pair routes
+                                   {:handler handler
+                                    :params (dissoc view-data :redirect)})]
+              (rsp/redirect path :see-other))
+            (:respond view-data))))
       (rsp/content-type (rsp/not-found "not found") "text/plain"))))
 
 (defn wrap-auth [h]
@@ -68,10 +76,16 @@
 
 (defn start [config]
   (let [db (-> config :db :connection)
-        pipeline (middlewares config)
+        log-stream (if-let [f (-> config :http :log-file-name)]
+                     (io/writer (io/file f) :append true)
+                     *err*)
+        pipeline (binding [*err* log-stream] (middlewares config))
         wrap-db (fn [h] (fn [r] (h (assoc r :db db))))
         server (run-jetty (wrap-db pipeline)
                           (assoc (:http config) :join? false))]
+    (binding [*out* log-stream]
+      (println (json/generate-string {:timestamp (java.util.Date.)
+                                      :message "HTTP server ready"})))
     (assoc-in config [:http :server] server)))
 
 (defn stop [config]
